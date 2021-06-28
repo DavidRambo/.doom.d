@@ -14,14 +14,14 @@
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t
-        doom-gruvbox-light-variant "soft"))
+        doom-gruvbox-light-variant "hard"))
 
 (setq company-global-modes '(not org-mode))
 
 (setq display-line-numbers-type nil)
 
 (global-linum-mode t)
-(setq linum-format 'dynamic)
+(setq linum-format "%2d ")
 
 (after! org
  (add-hook 'org-mode-hook 'org-indent-mode)
@@ -135,6 +135,13 @@
       ("w" "Work-related tasks" tags-todo "postdoc|book"))
 )
 
+(define-key evil-normal-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
+(define-key evil-normal-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+(define-key evil-motion-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
+(define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+; Make horizontal movement cross lines
+(setq-default evil-cross-lines t)
+
 (global-set-key (kbd "C-<prior>") #'previous-buffer)
 (global-set-key (kbd "C-<next>") #'next-buffer)
 
@@ -150,3 +157,9 @@
   (interactive)
   (find-file-existing "~/notes/tasks.org"))
 (global-set-key (kbd "C-c t") 'open-task-file)
+
+;(defun open-journal-entry ()
+;  "Open today's journal entry."
+;  (interactive)
+;  (find-file-existing "~/notes/journal/%Y-%m-%d.org"))
+;(global-set-key (kbd "C-c j") 'open-journal-entry)

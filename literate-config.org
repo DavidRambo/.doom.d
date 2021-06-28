@@ -13,11 +13,12 @@
   - [[#org-journal][Org Journal]]
   - [[#org-super-agenda][Org Super Agenda]]
   - [[#normal-mode-navigation][Normal Mode Navigation]]
-- [[#mappings][MAPPINGS]]
+- [[#mappings][Mappings]]
   - [[#buffer-movement][Buffer Movement]]
   - [[#s-as-substitute]["S" as substitute]]
   - [[#writeroom][Writeroom]]
   - [[#open-tasksorg-file][Open tasks.org file]]
+  - [[#open-todays-journal-entry][Open today's journal entry]]
 
 * Preamble
 
@@ -89,7 +90,7 @@ There are two ways to load a theme. Both assume the theme is installed and
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t
-        doom-gruvbox-light-variant "soft"))
+        doom-gruvbox-light-variant "hard"))
 #+end_src
 
 * Org Settings
@@ -105,12 +106,13 @@ etq display-line-numbers-type nil)
 
  I have disabled display-line-numbers in favor of linum-mode because
  linum-mode works better with non-monospace fonts.
+ (The problem was that wrapped lines would move into the line number column.)
 
 #+begin_src elisp
 (setq display-line-numbers-type nil)
 
 (global-linum-mode t)
-(setq linum-format 'dynamic)
+(setq linum-format "%2d ")
 #+end_src
 
 ** After Org: most of my settings
@@ -256,7 +258,16 @@ In Vim on Linux, I could navigate in normal mode without skipping wrapped lines 
 This won't work here because "g" plus an evil-movement jumps to the next item or heading.
 In evil-mode, the arrows move in this way in insert mode.
 
-* MAPPINGS
+#+begin_src elisp
+(define-key evil-normal-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
+(define-key evil-normal-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+(define-key evil-motion-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
+(define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+; Make horizontal movement cross lines
+(setq-default evil-cross-lines t)
+#+end_src
+
+* Mappings
 
 ** Buffer Movement
  Set Ctrl+PGUP/PGDN (my browser tab nav keys) to move between buffers.
@@ -287,11 +298,20 @@ Writeroom-Mode keybinding
 
 ** Open tasks.org file
 Set key to open tasks.org file.
-This echoes the keybinding to open the journal file: "C-c j"
 #+begin_src elisp
 (defun open-task-file ()
   "Open tasks.org file."
   (interactive)
   (find-file-existing "~/notes/tasks.org"))
 (global-set-key (kbd "C-c t") 'open-task-file)
+#+end_src
+
+** Open today's journal entry
+This needs an intermediary variable to name the current file because at present it reads the file format literally.
+#+begin_src elisp
+;(defun open-journal-entry ()
+;  "Open today's journal entry."
+;  (interactive)
+;  (find-file-existing "~/notes/journal/%Y-%m-%d.org"))
+;(global-set-key (kbd "C-c j") 'open-journal-entry)
 #+end_src
