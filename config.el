@@ -18,15 +18,19 @@
 
 (setq company-global-modes '(not org-mode))
 
-(setq display-line-numbers-type nil)
+(setq display-line-numbers-type t)
 
-(global-linum-mode t)
-(setq linum-format "%2d ")
+;(global-linum-mode t)
+;(setq linum-format "%2d ")
+
+(add-hook 'org-mode-hook (lambda ()
+            (setq hl-line-mode nil)))
 
 (after! org
  (add-hook 'org-mode-hook 'org-indent-mode)
  (setq org-directory "~/notes/"
-       org-agenda-files (file-expand-wildcards "~/notes/*.org")
+       ;org-agenda-files (file-expand-wildcards "~/notes/*.org")
+       org-agenda-files '("~/notes/tasks.org")
        org-hide-emphasis-markers t)
 
 ;; TODOs
@@ -72,13 +76,16 @@
  (custom-theme-set-faces
   'user
   ;'(variable-pitch ((t (:family "ETBembo" :height 160 :weight thin))))
-  '(variable-pitch ((t (:family "Source Sans Pro" :size 14 :weight light))))
+  '(variable-pitch ((t (:family "Source Sans Pro" :size 14 :weight regular))))
   '(fixed-pitch ((t ( :family "Ubuntu Mono" )))))
+
+
 
  (add-hook 'org-mode-hook 'variable-pitch-mode)
 
  (custom-theme-set-faces
    'user
+   '(org-default((t (:foreground "black"))))
    '(org-block ((t (:inherit fixed-pitch))))
    '(org-code ((t (:inherit (shadow fixed-pitch)))))
    '(org-document-info ((t (:foreground "dark orange"))))

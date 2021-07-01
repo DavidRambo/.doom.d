@@ -8,6 +8,7 @@
 - [[#org-settings][Org Settings]]
   - [[#turn-off-company][Turn off company]]
   - [[#line-numbers][Line numbers]]
+  - [[#disable-line-highlighting][Disable line highlighting]]
   - [[#after-org-most-of-my-settings][After Org: most of my settings]]
   - [[#deft][Deft]]
   - [[#org-journal][Org Journal]]
@@ -100,29 +101,53 @@ There are two ways to load a theme. Both assume the theme is installed and
 #+end_src
 
 ** Line numbers
- This determines the style of line numbers in effect. If set to `nil', line
- numbers are disabled. For relative line numbers, set this to `relative'.
-etq display-line-numbers-type nil)
-
- I have disabled display-line-numbers in favor of linum-mode because
+ I had disabled display-line-numbers in favor of linum-mode because
  linum-mode works better with non-monospace fonts.
- (The problem was that wrapped lines would move into the line number column.)
+ (The problem is that wrapped lines would move into the line number column.)
+ However, that is being deprecated and apparently slows emacs way down when reaching a thousand lines.
 
 #+begin_src elisp
-(setq display-line-numbers-type nil)
+(setq display-line-numbers-type t)
 
-(global-linum-mode t)
-(setq linum-format "%2d ")
+;(global-linum-mode t)
+;(setq linum-format "%2d ")
 #+end_src
 
+I customized the color of the current line number as follows:
+ - "M-x list-faces-display"
+ - find "line-number-current-line" and press RET
+ - set a new value and "Apply" or "Apply and Save"
+
+However, according to Eli Zaretskii, who wrote display-line-numbers, changing the face of the current line number disallows some of what makes this package more efficient than linum.
+
+** Disable line highlighting
+
+I can do it manually with the function `global-hl-line-mode` but it won't take when applying here.
+
+#+begin_src elisp
+(add-hook 'org-mode-hook (lambda ()
+            (setq hl-line-mode nil)))
+#+end_src
+Above does not work either.
+
 ** After Org: most of my settings
-This section establishes my org-directory, source for org-agenda, fonts and other appearances like emphasis markers and bullets, and TODOs.
+This section establishes:
+ * my org-directory,
+ * source for org-agenda,
+ * fonts and other appearances like emphasis markers and bullets,
+ * and TODOs.
+
+Including my entire org notes directory in the agenda was too slow (at least the first time I loaded it up).
+So I went back to only "tasks.org" and I will add to it with "C-c [".
+I may add my journal subdirectory in the future:
+org-agenda-files '("~/notes/tasks.org" (files-expand-wildcards "~/notes/journal*.org"))
 
 #+begin_src elisp
 (after! org
  (add-hook 'org-mode-hook 'org-indent-mode)
  (setq org-directory "~/notes/"
-       org-agenda-files (file-expand-wildcards "~/notes/*.org")
+       ;org-agenda-files (file-expand-wildcards "~/notes/*.org")
+       org-agenda-files '("~/notes/tasks.org")
        org-hide-emphasis-markers t)
 
 ;; TODOs
@@ -168,13 +193,16 @@ This section establishes my org-directory, source for org-agenda, fonts and othe
  (custom-theme-set-faces
   'user
   ;'(variable-pitch ((t (:family "ETBembo" :height 160 :weight thin))))
-  '(variable-pitch ((t (:family "Source Sans Pro" :size 14 :weight light))))
+  '(variable-pitch ((t (:family "Source Sans Pro" :size 14 :weight regular))))
   '(fixed-pitch ((t ( :family "Ubuntu Mono" )))))
+
+
 
  (add-hook 'org-mode-hook 'variable-pitch-mode)
 
  (custom-theme-set-faces
    'user
+   '(org-default((t (:foreground "black"))))
    '(org-block ((t (:inherit fixed-pitch))))
    '(org-code ((t (:inherit (shadow fixed-pitch)))))
    '(org-document-info ((t (:foreground "dark orange"))))
@@ -280,13 +308,17 @@ In evil-mode, the arrows move in this way in insert mode.
 
 ** "S" as substitute
 Disable evil-snipe so that "s" can be used as evil-substitute
-I put the following in packages.el: (package! evil-snipe :disable t)
-Set "s" as evil-substitute
+I put the following in packages.el:
+    `(package! evil-snipe :disable t)`
+Set "s" as evil-substitute:
 
 #+begin_src elisp
 (define-key evil-motion-state-map "s" 'evil-substitute)
 (define-key evil-motion-state-map "S" 'evil-change-whole-line)
 #+end_src
+
+Note that selecting two characters to which to jump can still be accomplished with avy ("g s s").
+I prefer to use avy's timed-character function ("g s /").
 
 ** Writeroom
 Writeroom-Mode keybinding
