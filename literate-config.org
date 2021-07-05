@@ -6,12 +6,15 @@
 - [[#fonts][Fonts]]
 - [[#theme][Theme]]
 - [[#org-settings][Org Settings]]
+  - [[#after-org-most-of-my-settings][After Org: most of my settings]]
   - [[#turn-off-company][Turn off company]]
   - [[#line-numbers][Line numbers]]
   - [[#disable-line-highlighting][Disable line highlighting]]
-  - [[#after-org-most-of-my-settings][After Org: most of my settings]]
+  - [[#todos][TODOs]]
+  - [[#bullets][Bullets]]
   - [[#deft][Deft]]
   - [[#org-journal][Org Journal]]
+  - [[#custom-commands-for-org-agenda][Custom Commands for Org Agenda]]
   - [[#org-super-agenda][Org Super Agenda]]
   - [[#normal-mode-navigation][Normal Mode Navigation]]
 - [[#mappings][Mappings]]
@@ -19,6 +22,7 @@
   - [[#s-as-substitute]["S" as substitute]]
   - [[#writeroom][Writeroom]]
   - [[#open-tasksorg-file][Open tasks.org file]]
+  - [[#open-hours-log][Open hours log]]
   - [[#open-todays-journal-entry][Open today's journal entry]]
 
 * Preamble
@@ -95,6 +99,77 @@ There are two ways to load a theme. Both assume the theme is installed and
 #+end_src
 
 * Org Settings
+** After Org: most of my settings
+This section establishes:
+ * my org-directory,
+ * source for org-agenda,
+ * fonts and other appearances
+
+Including my entire org notes directory in the agenda was too slow (at least the first time I loaded it up).
+So I went back to only "tasks.org" and I will add to it with "C-c [".
+I may add my journal subdirectory in the future:
+org-agenda-files '("~/notes/tasks.org" (files-expand-wildcards "~/notes/journal*.org"))
+
+#+begin_src elisp
+(after! org
+ (add-hook 'org-mode-hook 'org-indent-mode)
+ (setq org-directory "~/notes/"
+       ;org-agenda-files (file-expand-wildcards "~/notes/*.org")
+       org-agenda-files '("~/notes/tasks.org")
+       org-hide-emphasis-markers t)
+
+ (require 'org-inlinetask) ; C-c C-x t
+
+ ;; Turn off quote block styling by toggling
+ (setq org-fontify-quote-and-verse-blocks 'nil)
+
+ (let* ((variable-tuple
+          (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+                ((x-list-fonts "Ubuntu") '(:font "Ubuntu"))
+                ((x-family-fonts "Serif")    '(:family "Serif"))
+                (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+         (headline           `(:inherit default :weight bold)))
+
+    (custom-theme-set-faces
+     'user
+     `(org-level-8 ((t (,@headline ,@variable-tuple))))
+     `(org-level-7 ((t (,@headline ,@variable-tuple))))
+     `(org-level-6 ((t (,@headline ,@variable-tuple))))
+     `(org-level-5 ((t (,@headline ,@variable-tuple))))
+     `(org-level-4 ((t (,@headline ,@variable-tuple))))
+     `(org-level-3 ((t (,@headline ,@variable-tuple :size 14))))
+     `(org-level-2 ((t (,@headline ,@variable-tuple :size 14))))
+     `(org-level-1 ((t (,@headline ,@variable-tuple :size 16))))
+     `(org-document-title ((t (,@headline ,@variable-tuple :height 1.1 :underline nil))))))
+
+ (custom-theme-set-faces
+  'user
+  ;'(variable-pitch ((t (:family "ETBembo" :height 160 :weight thin))))
+  '(variable-pitch ((t (:family "Source Sans Pro" :size 14 :weight regular))))
+  '(fixed-pitch ((t ( :family "Ubuntu Mono" )))))
+
+ (add-hook 'org-mode-hook 'variable-pitch-mode)
+
+ (custom-theme-set-faces
+   'user
+   '(org-default((t (:foreground "black"))))
+   '(org-block ((t (:inherit fixed-pitch))))
+   '(org-code ((t (:inherit (shadow fixed-pitch)))))
+   '(org-document-info ((t (:foreground "dark orange"))))
+   '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+   '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+   ;'(org-link ((t (:foreground "royal blue" :underline t))))
+   '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+   '(org-property-value ((t (:inherit fixed-pitch))) t)
+   '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+   '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
+   '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 0.8))))
+   '(org-verbatim ((t (:inherit (shadow fixed-pitch)))))
+)
+
+) ; end after! org
+#+end_src
+
 ** Turn off company
 #+begin_src elisp
 (setq company-global-modes '(not org-mode))
@@ -107,7 +182,7 @@ There are two ways to load a theme. Both assume the theme is installed and
  However, that is being deprecated and apparently slows emacs way down when reaching a thousand lines.
 
 #+begin_src elisp
-(setq display-line-numbers-type t)
+(setq display-line-numbers-type nil)
 
 ;(global-linum-mode t)
 ;(setq linum-format "%2d ")
@@ -125,97 +200,43 @@ However, according to Eli Zaretskii, who wrote display-line-numbers, changing th
 I can do it manually with the function `global-hl-line-mode` but it won't take when applying here.
 
 #+begin_src elisp
-(add-hook 'org-mode-hook (lambda ()
-            (setq hl-line-mode nil)))
+;(add-hook 'org-mode-hook (lambda ()
+;            (setq hl-line-mode nil)))
 #+end_src
 Above does not work either.
 
-** After Org: most of my settings
-This section establishes:
- * my org-directory,
- * source for org-agenda,
- * fonts and other appearances like emphasis markers and bullets,
- * and TODOs.
+** TODOs
+*** Keywords
+#+begin_src elisp
+(setq org-todo-keywords
+      (quote ((sequence "TODO(t)" "NEXT(n)" "IN-PROGRESS(p)" "|" "DONE(d)")
+              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING"))))
 
-Including my entire org notes directory in the agenda was too slow (at least the first time I loaded it up).
-So I went back to only "tasks.org" and I will add to it with "C-c [".
-I may add my journal subdirectory in the future:
-org-agenda-files '("~/notes/tasks.org" (files-expand-wildcards "~/notes/journal*.org"))
+#+end_src
 
+*** Custom Faces
+For adjusting the entire heading with a "DONE" todo-tag, the official code would not work so I used the customize menu.
+To get to it, do: "M-x org-customize" > Org Appearance > Org Faces > Org Headline Done
+Org Fontify Done Headline was already set to true, but it can be found under "Org Appearance" if not.
 #+begin_src elisp
 (after! org
- (add-hook 'org-mode-hook 'org-indent-mode)
- (setq org-directory "~/notes/"
-       ;org-agenda-files (file-expand-wildcards "~/notes/*.org")
-       org-agenda-files '("~/notes/tasks.org")
-       org-hide-emphasis-markers t)
+(setq org-todo-keyword-faces
+ '(("TODO" . (:foreground "#DC322F" :weight regular))
+   ("NEXT" . (:foreground "#6C71C4" :weight bold))
+   ("IN-PROGRESS" . (:foreground "#2AA198" :weight bold))
+   ("DONE" . (:foreground "#002B36" :weight light))
+ ))
+)
+#+end_src
 
-;; TODOs
-  (setq org-todo-keywords
-        (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-                (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING"))))
-
-  (use-package! org-superstar-mode
+** Bullets
+  #+begin_src elisp
+(use-package! org-superstar-mode
     :custom
     org-superstar-headline-bullets-list '("◉" "○" "⁖" "◌" "◿")
     org-superstar-first-inlinetask-bullet '("▷")
  ;   org-superstar-item-bullet-alist '("•")
     :hook (org-mode . org-bullets-mode))
-
- (require 'org-inlinetask) ; C-c C-x t
-
- ;; Turn off quote block styling by toggling
- (setq org-fontify-quote-and-verse-blocks 'nil)
-
-; (font-lock-add-keywords 'org-mode
-;                          '(("^ *\\([-+*]\\) "
-;                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "◦"))))))
-
- (let* ((variable-tuple
-          (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-                ((x-list-fonts "Ubuntu") '(:font "Ubuntu"))
-                ((x-family-fonts "Serif")    '(:family "Serif"))
-                (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
-         (headline           `(:inherit default :weight bold)))
-
-    (custom-theme-set-faces
-     'user
-     `(org-level-8 ((t (,@headline ,@variable-tuple))))
-     `(org-level-7 ((t (,@headline ,@variable-tuple))))
-     `(org-level-6 ((t (,@headline ,@variable-tuple))))
-     `(org-level-5 ((t (,@headline ,@variable-tuple))))
-     `(org-level-4 ((t (,@headline ,@variable-tuple :size 14))))
-     `(org-level-3 ((t (,@headline ,@variable-tuple :size 14))))
-     `(org-level-2 ((t (,@headline ,@variable-tuple :size 16))))
-     `(org-level-1 ((t (,@headline ,@variable-tuple :size 18))))
-     `(org-document-title ((t (,@headline ,@variable-tuple :height 1.25 :underline nil))))))
-
- (custom-theme-set-faces
-  'user
-  ;'(variable-pitch ((t (:family "ETBembo" :height 160 :weight thin))))
-  '(variable-pitch ((t (:family "Source Sans Pro" :size 14 :weight regular))))
-  '(fixed-pitch ((t ( :family "Ubuntu Mono" )))))
-
-
-
- (add-hook 'org-mode-hook 'variable-pitch-mode)
-
- (custom-theme-set-faces
-   'user
-   '(org-default((t (:foreground "black"))))
-   '(org-block ((t (:inherit fixed-pitch))))
-   '(org-code ((t (:inherit (shadow fixed-pitch)))))
-   '(org-document-info ((t (:foreground "dark orange"))))
-   '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
-   '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
-   ;'(org-link ((t (:foreground "royal blue" :underline t))))
-   '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-   '(org-property-value ((t (:inherit fixed-pitch))) t)
-   '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-   '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
-   '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
-   '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
-) ; end after! org
 #+end_src
 
 ** Deft
@@ -237,47 +258,79 @@ org-agenda-files '("~/notes/tasks.org" (files-expand-wildcards "~/notes/journal*
         org-journal-date-format "%B %d, %Y (%A) "
         org-journal-file-format "%Y-%m-%d.org")
 
-  (setq org-journal-enable-agenda-integration t)
+  (setq org-journal-enable-agenda-integration nil)
 )
 #+end_src
 
-** Org Super Agenda
-
-Basic configuration.
-
-#+begin_src elisp
-(use-package! org-super-agenda
-  :commands (org-super-agenda-mode)
-  :after org-agenda
-  :init
-  (setq
-        org-log-done 'time
-        org-agenda-skip-scheduled-if-done t
-        org-agenda-skip-deadline-if-done t
-        org-agenda-include-deadlines t
-        org-agenda-block-separator nil
-        org-agenda-tags-column 100
-        org-agenda-compact-blocks t)
-  :config
-  (org-super-agenda-mode)
-)
-#+end_src
-
-*** Display groups for Org Super Agenda
-
-TBD
-
-*** Custom Commands for Org Agenda
+** Custom Commands for Org Agenda
+These show up when pressing "SPC o A":
 
 #+begin_src elisp
 (setq org-agenda-custom-commands
       '(("n" "Agenda and all TODOs"
          ((agenda "")
          (alltodo "")))
-      ("h" "Home-related tasks" tags-todo "home"
-         ((org-agenda-files '("~/notes/tasks.org")))
-         )
-      ("w" "Work-related tasks" tags-todo "postdoc|book"))
+        ("h" "Home-related tasks" tags-todo "home"
+           ((org-agenda-files '("~/notes/tasks.org"))) ; For when I expand agenda files and want this to be quick.
+           )
+        ("w" "Work-related tasks" tags-todo "postdoc|book")
+        ("b" "Book-related tasks" tags-todo "book"))
+)
+#+end_src
+
+** Org Super Agenda
+Basic configuration.
+
+#+begin_src elisp
+(use-package! org-super-agenda
+  :after org-agenda
+  :init
+  (setq
+        org-log-done nil
+        org-agenda-skip-scheduled-if-done t
+        org-agenda-skip-deadline-if-done t
+        org-agenda-include-deadlines t
+        org-agenda-block-separator 9472
+        org-agenda-tags-column 100
+        org-agenda-compact-blocks nil)
+  :config
+  (org-super-agenda-mode)
+)
+#+end_src
+
+*** Groups for Org Super Agenda
+
+#+begin_src elisp
+(setq org-super-agenda-groups
+      '((:name "Today"
+         :time-grid t
+         :scheduled today
+         :deadline today
+         :face (:foreground "#DC322F")
+         :order 1)
+        (:name "In Progress"
+         :todo ("IN-PROGRESS")
+         :face (:foreground "#2AA198")
+         :order 2)
+        (:name "Next"
+         :todo ("NEXT")
+         :face (:foreground "#6C71C4")
+         :order 3)
+        (:order-multi (2 (:name "Work"
+                          :and (:tag "postdoc"))
+                         (:name "Reading"
+                          :and (:tag "reading")
+                          :not (:tag "postdoc"))
+                         (:name "Writing"
+                          :and (:tag "book" :tag "writing")
+                          :not (:tag "reading"))
+                      )
+        )
+         (:name "Remaining Tasks"
+                :and (:todo "TODO"
+                      :not (:todo "postdoc" :todo "IN-PROGRESS" :todo "NEXT" :todo "reading" :todo "writing")))
+         (:todo "WAITING" :order 8)
+       )
 )
 #+end_src
 
@@ -329,7 +382,7 @@ Writeroom-Mode keybinding
 #+end_src
 
 ** Open tasks.org file
-Set key to open tasks.org file.
+Write function to open tasks.org and then map key to open.
 #+begin_src elisp
 (defun open-task-file ()
   "Open tasks.org file."
@@ -338,8 +391,19 @@ Set key to open tasks.org file.
 (global-set-key (kbd "C-c t") 'open-task-file)
 #+end_src
 
+** Open hours log
+Write function to open hours-log.org and then map key to open.
+#+begin_src elisp
+(defun open-hours-log ()
+  "Open hours-log.org file."
+  (interactive)
+  (find-file-existing "~/notes/hours-log.org"))
+(global-set-key (kbd "C-c h") 'open-hours-log)
+#+end_src
+
 ** Open today's journal entry
 This needs an intermediary variable to name the current file because at present it reads the file format literally.
+Just use "SPC n j j"
 #+begin_src elisp
 ;(defun open-journal-entry ()
 ;  "Open today's journal entry."
