@@ -100,7 +100,7 @@
 (use-package! org-superstar-mode
     :custom
     org-superstar-headline-bullets-list '("◉" "○" "⁖" "◌" "◿")
-    org-superstar-first-inlinetask-bullet '("▷")
+    org-superstar-first-inlinetask-bullet '("⁃")
  ;   org-superstar-item-bullet-alist '("•")
     :hook (org-mode . org-bullets-mode))
 
@@ -122,7 +122,7 @@
 
 (setq org-agenda-custom-commands
       '(("n" "Agenda and all TODOs"
-         ((agenda "")
+         ((agenda "" (org-agenda-overriding-header ""))
          (alltodo "")))
         ("h" "Home-related tasks" tags-todo "home"
            ((org-agenda-files '("~/notes/tasks.org"))) ; For when I expand agenda files and want this to be quick.

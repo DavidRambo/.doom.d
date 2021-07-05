@@ -234,7 +234,7 @@ Org Fontify Done Headline was already set to true, but it can be found under "Or
 (use-package! org-superstar-mode
     :custom
     org-superstar-headline-bullets-list '("◉" "○" "⁖" "◌" "◿")
-    org-superstar-first-inlinetask-bullet '("▷")
+    org-superstar-first-inlinetask-bullet '("-")
  ;   org-superstar-item-bullet-alist '("•")
     :hook (org-mode . org-bullets-mode))
 #+end_src
@@ -268,7 +268,7 @@ These show up when pressing "SPC o A":
 #+begin_src elisp
 (setq org-agenda-custom-commands
       '(("n" "Agenda and all TODOs"
-         ((agenda "")
+         ((agenda "" (org-agenda-overriding-header ""))
          (alltodo "")))
         ("h" "Home-related tasks" tags-todo "home"
            ((org-agenda-files '("~/notes/tasks.org"))) ; For when I expand agenda files and want this to be quick.
