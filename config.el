@@ -1,7 +1,7 @@
 (setq user-full-name "David Rambo"
       user-mail-address "davrambo@gmail.com")
 
-(set-face-attribute 'default nil :font "Ubuntu Mono-14")
+(set-face-attribute 'default nil :font "Ubuntu Mono-16")
 ;(set-face-attribute 'fixed-pitch nil :font "Ubuntu Mono-14")
 ;(set-face-attribute 'variable-pitch nil :font "Source Sans Pro")
 ;
@@ -42,22 +42,22 @@
      `(org-level-6 ((t (,@headline ,@variable-tuple))))
      `(org-level-5 ((t (,@headline ,@variable-tuple))))
      `(org-level-4 ((t (,@headline ,@variable-tuple))))
-     `(org-level-3 ((t (,@headline ,@variable-tuple :size 14))))
-     `(org-level-2 ((t (,@headline ,@variable-tuple :size 14))))
-     `(org-level-1 ((t (,@headline ,@variable-tuple :size 16))))
+     `(org-level-3 ((t (,@headline ,@variable-tuple :size 16))))
+     `(org-level-2 ((t (,@headline ,@variable-tuple :size 16))))
+     `(org-level-1 ((t (,@headline ,@variable-tuple :size 18))))
      `(org-document-title ((t (,@headline ,@variable-tuple :height 1.1 :underline nil))))))
 
  (custom-theme-set-faces
   'user
   ;'(variable-pitch ((t (:family "ETBembo" :height 160 :weight thin))))
-  '(variable-pitch ((t (:family "Source Sans Pro" :size 14 :weight regular))))
+  '(variable-pitch ((t (:family "Source Sans Pro" :size 16 :weight regular))))
   '(fixed-pitch ((t ( :family "Ubuntu Mono" )))))
 
  (add-hook 'org-mode-hook 'variable-pitch-mode)
 
  (custom-theme-set-faces
    'user
-   '(org-default((t (:foreground "black"))))
+;   '(org-default((t (:foreground "black"))))
    '(org-block ((t (:inherit fixed-pitch))))
    '(org-code ((t (:inherit (shadow fixed-pitch)))))
    '(org-document-info ((t (:foreground "dark orange"))))
@@ -84,23 +84,27 @@
 ;(add-hook 'org-mode-hook (lambda ()
 ;            (setq hl-line-mode nil)))
 
-(setq org-todo-keywords
-      (quote ((sequence "TODO(t)" "NEXT(n)" "IN-PROGRESS(p)" "|" "DONE(d)")
-              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING"))))
+(after! org
+ (setq org-todo-keywords
+       (quote ((sequence "TODO(t)" "NEXT(n)" "IN-PROGRESS(i)" "|" "DONE(d)")
+               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING")))
+  )
+)
 
 (after! org
-(setq org-todo-keyword-faces
- '(("TODO" . (:foreground "#DC322F" :weight regular))
-   ("NEXT" . (:foreground "#6C71C4" :weight bold))
-   ("IN-PROGRESS" . (:foreground "#2AA198" :weight bold))
-   ("DONE" . (:foreground "#002B36" :weight light))
- ))
+ (setq org-todo-keyword-faces
+  '(("TODO" . (:foreground "#DC322F" :weight regular))
+    ("NEXT" . (:foreground "#6C71C4" :weight bold))
+    ("IN-PROGRESS" . (:foreground "#2AA198" :weight bold))
+    ("DONE" . (:foreground "#002B36" :weight light))
+   )
+ )
 )
 
 (use-package! org-superstar-mode
     :custom
     org-superstar-headline-bullets-list '("◉" "○" "⁖" "◌" "◿")
-    org-superstar-first-inlinetask-bullet '("⁃")
+    org-superstar-first-inlinetask-bullet '("-")
  ;   org-superstar-item-bullet-alist '("•")
     :hook (org-mode . org-bullets-mode))
 
@@ -122,7 +126,7 @@
 
 (setq org-agenda-custom-commands
       '(("n" "Agenda and all TODOs"
-         ((agenda "" (org-agenda-overriding-header ""))
+         ((agenda "")
          (alltodo "")))
         ("h" "Home-related tasks" tags-todo "home"
            ((org-agenda-files '("~/notes/tasks.org"))) ; For when I expand agenda files and want this to be quick.
@@ -154,18 +158,19 @@
          :face (:foreground "#DC322F")
          :order 1)
         (:name "In Progress"
-         :todo ("IN-PROGRESS")
+         :todo ("IN-PROGRESS(p)")
          :face (:foreground "#2AA198")
          :order 2)
         (:name "Next"
-         :todo ("NEXT")
+         :todo ("NEXT(n)")
          :face (:foreground "#6C71C4")
          :order 3)
         (:order-multi (2 (:name "Work"
                           :and (:tag "postdoc"))
                          (:name "Reading"
                           :and (:tag "reading")
-                          :not (:tag "postdoc"))
+                          :not (:tag "postdoc")
+                          :not (:tag "home"))
                          (:name "Writing"
                           :and (:tag "book" :tag "writing")
                           :not (:tag "reading"))
@@ -195,6 +200,11 @@
       :desc "Writeroom-mode"
       "W" #'writeroom-mode)
 
+(use-package writeroom-mode
+  :ensure t
+  :init (add-hook 'org-mode-hook 'writeroom-mode)
+  :after org)
+
 (defun open-task-file ()
   "Open tasks.org file."
   (interactive)
@@ -212,3 +222,7 @@
 ;  (interactive)
 ;  (find-file-existing "~/notes/journal/%Y-%m-%d.org"))
 ;(global-set-key (kbd "C-c j") 'open-journal-entry)
+
+(map! :leader
+      :desc "Toggle flyspell"
+      "t s" #'flyspell-mode)
