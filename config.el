@@ -1,7 +1,7 @@
 (setq user-full-name "David Rambo"
       user-mail-address "davrambo@gmail.com")
 
-(set-face-attribute 'default nil :font "Ubuntu Mono-16")
+(set-face-attribute 'default nil :font "SauceCodePro Nerd Font-14")
 ;(set-face-attribute 'fixed-pitch nil :font "Ubuntu Mono-14")
 ;(set-face-attribute 'variable-pitch nil :font "Source Sans Pro")
 ;
@@ -16,6 +16,17 @@
         doom-themes-enable-italic t
         doom-gruvbox-light-variant "hard"))
 
+;(custom-theme-set-faces! 'doom-gruvbox
+;  '(org-level-1 :foreground #076678)
+;  '(org-level-2 :foreground #b57614)
+;  '(org-level-3 :foreground #8f3f71)
+;  '(org-level-4 :foreground #9d0006)
+;  '(org-level-5 :foreground #79740e)
+;  '(org-level-6 :foreground #427b58)
+;  '(org-level-7 :foreground #458588)
+;  '(org-level-8 :foreground #af3a03)
+;  )
+
 (after! org
  (add-hook 'org-mode-hook 'org-indent-mode)
  (setq org-directory "~/notes/"
@@ -26,11 +37,12 @@
  (require 'org-inlinetask) ; C-c C-x t
 
  ;; Turn off quote block styling by toggling
- (setq org-fontify-quote-and-verse-blocks 'nil)
+ (setq org-fontify-quote-and-verse-blocks 'nil
+       org-fontify-done-headline t)
 
  (let* ((variable-tuple
-          (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-                ((x-list-fonts "Ubuntu") '(:font "Ubuntu"))
+          (cond ((x-list-fonts "SauceCodePro Nerd Font") '(:font "SauceCodePro Nerd Font"))
+                ((x-list-fonts "Ubuntu Mono") '(:font "Ubuntu Mono"))
                 ((x-family-fonts "Serif")    '(:family "Serif"))
                 (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
          (headline           `(:inherit default :weight bold)))
@@ -45,15 +57,16 @@
      `(org-level-3 ((t (,@headline ,@variable-tuple :size 16))))
      `(org-level-2 ((t (,@headline ,@variable-tuple :size 16))))
      `(org-level-1 ((t (,@headline ,@variable-tuple :size 18))))
-     `(org-document-title ((t (,@headline ,@variable-tuple :height 1.1 :underline nil))))))
+     `(org-document-title ((t (,@headline ,@variable-tuple :height 1.1 :underline nil)))))
+    )
 
  (custom-theme-set-faces
   'user
-  ;'(variable-pitch ((t (:family "ETBembo" :height 160 :weight thin))))
   '(variable-pitch ((t (:family "Source Sans Pro" :size 16 :weight regular))))
-  '(fixed-pitch ((t ( :family "Ubuntu Mono" )))))
+  ;'(fixed-pitch ((t ( :family "Ubuntu Mono" )))))
+  '(fixed-pitch ((t ( :family "SauceCodePro Nerd Font" :size 14 :weight regular )))))
 
- (add-hook 'org-mode-hook 'variable-pitch-mode)
+; (add-hook 'org-mode-hook 'variable-pitch-mode)
 
  (custom-theme-set-faces
    'user
@@ -70,13 +83,12 @@
    '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
    '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 0.8))))
    '(org-verbatim ((t (:inherit (shadow fixed-pitch)))))
-)
-
+) ; end custom-theme-set-faces
 ) ; end after! org
 
 (setq company-global-modes '(not org-mode))
 
-(setq display-line-numbers-type nil)
+(setq display-line-numbers-type t)
 
 ;(global-linum-mode t)
 ;(setq linum-format "%2d ")
@@ -96,7 +108,7 @@
   '(("TODO" . (:foreground "#DC322F" :weight regular))
     ("NEXT" . (:foreground "#6C71C4" :weight bold))
     ("IN-PROGRESS" . (:foreground "#2AA198" :weight bold))
-    ("DONE" . (:foreground "#002B36" :weight light))
+    ("DONE" . (:foreground "#427b58" :weight light))
    )
  )
 )
@@ -127,12 +139,14 @@
 (setq org-agenda-custom-commands
       '(("n" "Agenda and all TODOs"
          ((agenda "")
-         (alltodo "")))
+;         (alltodo "")
+         (tags-todo "")))
         ("h" "Home-related tasks" tags-todo "home"
            ((org-agenda-files '("~/notes/tasks.org"))) ; For when I expand agenda files and want this to be quick.
            )
         ("w" "Work-related tasks" tags-todo "postdoc|book")
-        ("b" "Book-related tasks" tags-todo "book"))
+        ("b" "Book-related tasks" tags-todo "book")
+        ("r" "Reading tasks" tags-todo "reading"))
 )
 
 (use-package! org-super-agenda
@@ -145,7 +159,8 @@
         org-agenda-include-deadlines t
         org-agenda-block-separator 9472
         org-agenda-tags-column 100
-        org-agenda-compact-blocks nil)
+        org-agenda-compact-blocks nil
+        )
   :config
   (org-super-agenda-mode)
 )
@@ -165,15 +180,14 @@
          :todo ("NEXT(n)")
          :face (:foreground "#6C71C4")
          :order 3)
-        (:order-multi (2 (:name "Work"
+        (:order-multi (4 (:name "Work"
                           :and (:tag "postdoc"))
-                         (:name "Reading"
-                          :and (:tag "reading")
-                          :not (:tag "postdoc")
-                          :not (:tag "home"))
                          (:name "Writing"
-                          :and (:tag "book" :tag "writing")
-                          :not (:tag "reading"))
+                          :and (:tag "book" :tag "writing"))
+                         (:name "Reading"
+                          :and (:tag "reading"))
+                         (:name "Home"
+                          :and (:tag "home"))
                       )
         )
          (:name "Remaining Tasks"
@@ -200,10 +214,10 @@
       :desc "Writeroom-mode"
       "W" #'writeroom-mode)
 
-(use-package writeroom-mode
-  :ensure t
-  :init (add-hook 'org-mode-hook 'writeroom-mode)
-  :after org)
+;(use-package writeroom-mode
+;  :ensure t
+;  :init (add-hook 'org-mode-hook 'writeroom-mode)
+;  :after org)
 
 (defun open-task-file ()
   "Open tasks.org file."

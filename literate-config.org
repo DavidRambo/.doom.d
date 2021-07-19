@@ -75,7 +75,7 @@
 I found that to make it work the way I like, I have custom font faces set in an org-mode specific section below.
 
 #+begin_src  elisp
-(set-face-attribute 'default nil :font "Ubuntu Mono-16")
+(set-face-attribute 'default nil :font "SauceCodePro Nerd Font-14")
 ;(set-face-attribute 'fixed-pitch nil :font "Ubuntu Mono-14")
 ;(set-face-attribute 'variable-pitch nil :font "Source Sans Pro")
 ;
@@ -99,6 +99,18 @@ There are two ways to load a theme. Both assume the theme is installed and
         doom-gruvbox-light-variant "hard"))
 #+end_src
 
+#+begin_src elisp
+;(custom-theme-set-faces! 'doom-gruvbox
+;  '(org-level-1 :foreground #076678)
+;  '(org-level-2 :foreground #b57614)
+;  '(org-level-3 :foreground #8f3f71)
+;  '(org-level-4 :foreground #9d0006)
+;  '(org-level-5 :foreground #79740e)
+;  '(org-level-6 :foreground #427b58)
+;  '(org-level-7 :foreground #458588)
+;  '(org-level-8 :foreground #af3a03)
+;  )
+#+end_src
 * Org Settings
 ** After Org: most of my settings
 This section establishes:
@@ -122,11 +134,12 @@ org-agenda-files '("~/notes/tasks.org" (files-expand-wildcards "~/notes/journal*
  (require 'org-inlinetask) ; C-c C-x t
 
  ;; Turn off quote block styling by toggling
- (setq org-fontify-quote-and-verse-blocks 'nil)
+ (setq org-fontify-quote-and-verse-blocks 'nil
+       org-fontify-done-headline t)
 
  (let* ((variable-tuple
-          (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-                ((x-list-fonts "Ubuntu") '(:font "Ubuntu"))
+          (cond ((x-list-fonts "SauceCodePro Nerd Font") '(:font "SauceCodePro Nerd Font"))
+                ((x-list-fonts "Ubuntu Mono") '(:font "Ubuntu Mono"))
                 ((x-family-fonts "Serif")    '(:family "Serif"))
                 (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
          (headline           `(:inherit default :weight bold)))
@@ -141,15 +154,16 @@ org-agenda-files '("~/notes/tasks.org" (files-expand-wildcards "~/notes/journal*
      `(org-level-3 ((t (,@headline ,@variable-tuple :size 16))))
      `(org-level-2 ((t (,@headline ,@variable-tuple :size 16))))
      `(org-level-1 ((t (,@headline ,@variable-tuple :size 18))))
-     `(org-document-title ((t (,@headline ,@variable-tuple :height 1.1 :underline nil))))))
+     `(org-document-title ((t (,@headline ,@variable-tuple :height 1.1 :underline nil)))))
+    )
 
  (custom-theme-set-faces
   'user
-  ;'(variable-pitch ((t (:family "ETBembo" :height 160 :weight thin))))
   '(variable-pitch ((t (:family "Source Sans Pro" :size 16 :weight regular))))
-  '(fixed-pitch ((t ( :family "Ubuntu Mono" )))))
+  ;'(fixed-pitch ((t ( :family "Ubuntu Mono" )))))
+  '(fixed-pitch ((t ( :family "SauceCodePro Nerd Font" :size 14 :weight regular )))))
 
- (add-hook 'org-mode-hook 'variable-pitch-mode)
+; (add-hook 'org-mode-hook 'variable-pitch-mode)
 
  (custom-theme-set-faces
    'user
@@ -166,8 +180,7 @@ org-agenda-files '("~/notes/tasks.org" (files-expand-wildcards "~/notes/journal*
    '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
    '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 0.8))))
    '(org-verbatim ((t (:inherit (shadow fixed-pitch)))))
-)
-
+) ; end custom-theme-set-faces
 ) ; end after! org
 #+end_src
 
@@ -183,7 +196,7 @@ org-agenda-files '("~/notes/tasks.org" (files-expand-wildcards "~/notes/journal*
  However, that is being deprecated and apparently slows emacs way down when reaching a thousand lines.
 
 #+begin_src elisp
-(setq display-line-numbers-type nil)
+(setq display-line-numbers-type t)
 
 ;(global-linum-mode t)
 ;(setq linum-format "%2d ")
@@ -227,7 +240,7 @@ Org Fontify Done Headline was already set to true, but it can be found under "Or
   '(("TODO" . (:foreground "#DC322F" :weight regular))
     ("NEXT" . (:foreground "#6C71C4" :weight bold))
     ("IN-PROGRESS" . (:foreground "#2AA198" :weight bold))
-    ("DONE" . (:foreground "#002B36" :weight light))
+    ("DONE" . (:foreground "#427b58" :weight light))
    )
  )
 )
@@ -273,12 +286,14 @@ These show up when pressing "SPC o A":
 (setq org-agenda-custom-commands
       '(("n" "Agenda and all TODOs"
          ((agenda "")
-         (alltodo "")))
+;         (alltodo "")
+         (tags-todo "")))
         ("h" "Home-related tasks" tags-todo "home"
            ((org-agenda-files '("~/notes/tasks.org"))) ; For when I expand agenda files and want this to be quick.
            )
         ("w" "Work-related tasks" tags-todo "postdoc|book")
-        ("b" "Book-related tasks" tags-todo "book"))
+        ("b" "Book-related tasks" tags-todo "book")
+        ("r" "Reading tasks" tags-todo "reading"))
 )
 #+end_src
 
@@ -296,7 +311,8 @@ Basic configuration.
         org-agenda-include-deadlines t
         org-agenda-block-separator 9472
         org-agenda-tags-column 100
-        org-agenda-compact-blocks nil)
+        org-agenda-compact-blocks nil
+        )
   :config
   (org-super-agenda-mode)
 )
@@ -320,15 +336,14 @@ Basic configuration.
          :todo ("NEXT(n)")
          :face (:foreground "#6C71C4")
          :order 3)
-        (:order-multi (2 (:name "Work"
+        (:order-multi (4 (:name "Work"
                           :and (:tag "postdoc"))
-                         (:name "Reading"
-                          :and (:tag "reading")
-                          :not (:tag "postdoc")
-                          :not (:tag "home"))
                          (:name "Writing"
-                          :and (:tag "book" :tag "writing")
-                          :not (:tag "reading"))
+                          :and (:tag "book" :tag "writing"))
+                         (:name "Reading"
+                          :and (:tag "reading"))
+                         (:name "Home"
+                          :and (:tag "home"))
                       )
         )
          (:name "Remaining Tasks"
@@ -353,8 +368,10 @@ In evil-mode, the arrows move in this way in insert mode.
 (setq-default evil-cross-lines t)
 #+end_src
 
-* Mappings
+It's still a little wonky, presumably because of the variable-face font I'm using.
+Scrolling up and down does not always remain in the correct column.
 
+* Mappings
 ** Buffer Movement
  Set Ctrl+PGUP/PGDN (my browser tab nav keys) to move between buffers.
  Rebind previous-buffer from <C-x C-Left> to C-PGUP (C-prior) and next-buffer to C-PGDN (or C-next)
@@ -377,7 +394,6 @@ Set "s" as evil-substitute:
 
 Note that selecting two characters to which to jump can still be accomplished with avy ("g s s").
 I prefer to use avy's timed-character function ("g s /").
-
 ** Writeroom
 Writeroom-Mode keybinding
 #+begin_src elisp
@@ -386,12 +402,12 @@ Writeroom-Mode keybinding
       "W" #'writeroom-mode)
 #+end_src
 
-Make writeroom default for org-mode files
+# Make writeroom default for org-mode files
 #+begin_src elisp
-(use-package writeroom-mode
-  :ensure t
-  :init (add-hook 'org-mode-hook 'writeroom-mode)
-  :after org)
+;(use-package writeroom-mode
+;  :ensure t
+;  :init (add-hook 'org-mode-hook 'writeroom-mode)
+;  :after org)
 #+end_src
 
 ** Open tasks.org file
