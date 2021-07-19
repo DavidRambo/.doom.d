@@ -395,7 +395,15 @@ Set "s" as evil-substitute:
 Note that selecting two characters to which to jump can still be accomplished with avy ("g s s").
 I prefer to use avy's timed-character function ("g s /").
 ** Writeroom
-Writeroom-Mode keybinding
+*** Config
+#+begin_src elisp
+(use-package writeroom-mode
+  :config
+  (setq writeroom-fullscreen-effect nil)
+    )
+#+end_src
+
+*** Writeroom-Mode keybinding
 #+begin_src elisp
 (map! :leader
       :desc "Writeroom-mode"

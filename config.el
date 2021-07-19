@@ -210,6 +210,11 @@
 (define-key evil-motion-state-map "s" 'evil-substitute)
 (define-key evil-motion-state-map "S" 'evil-change-whole-line)
 
+(use-package writeroom-mode
+  :config
+  (setq writeroom-fullscreen-effect nil)
+    )
+
 (map! :leader
       :desc "Writeroom-mode"
       "W" #'writeroom-mode)
