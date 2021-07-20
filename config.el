@@ -41,11 +41,12 @@
        org-fontify-done-headline t)
 
  (let* ((variable-tuple
-          (cond ((x-list-fonts "SauceCodePro Nerd Font") '(:font "SauceCodePro Nerd Font"))
-                ((x-list-fonts "Ubuntu Mono") '(:font "Ubuntu Mono"))
+          (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+                ((x-list-fonts "Ubuntu") '(:font "Ubuntu"))
                 ((x-family-fonts "Serif")    '(:family "Serif"))
-                (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
-         (headline           `(:inherit default :weight bold)))
+                (nil (warn "Cannot find a Sans Serif Font. Install Source Sans Pro."))))
+         (headline           `(:inherit default :weight bold))
+        )
 
     (custom-theme-set-faces
      'user
@@ -58,15 +59,14 @@
      `(org-level-2 ((t (,@headline ,@variable-tuple :size 16))))
      `(org-level-1 ((t (,@headline ,@variable-tuple :size 18))))
      `(org-document-title ((t (,@headline ,@variable-tuple :height 1.1 :underline nil)))))
-    )
+ )
 
  (custom-theme-set-faces
   'user
   '(variable-pitch ((t (:family "Source Sans Pro" :size 16 :weight regular))))
-  ;'(fixed-pitch ((t ( :family "Ubuntu Mono" )))))
-  '(fixed-pitch ((t ( :family "SauceCodePro Nerd Font" :size 14 :weight regular )))))
+  '(fixed-pitch ((t ( :family "SauceCodePro Nerd Font" :size 12 :weight regular )))))
 
-; (add-hook 'org-mode-hook 'variable-pitch-mode)
+ (add-hook 'org-mode-hook 'variable-pitch-mode)
 
  (custom-theme-set-faces
    'user
@@ -78,9 +78,9 @@
    '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
    ;'(org-link ((t (:foreground "royal blue" :underline t))))
    '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-   '(org-property-value ((t (:inherit fixed-pitch))) t)
+   '(org-property-value ((t (:inherit fixed-pitch :size 14))) t)
    '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-   '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
+   '(org-table ((t (:inherit fixed-pitch :foreground "#83a598" :size 12))))
    '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 0.8))))
    '(org-verbatim ((t (:inherit (shadow fixed-pitch)))))
 ) ; end custom-theme-set-faces
@@ -88,7 +88,7 @@
 
 (setq company-global-modes '(not org-mode))
 
-(setq display-line-numbers-type t)
+(setq display-line-numbers-type nil)
 
 ;(global-linum-mode t)
 ;(setq linum-format "%2d ")
@@ -139,8 +139,7 @@
 (setq org-agenda-custom-commands
       '(("n" "Agenda and all TODOs"
          ((agenda "")
-;         (alltodo "")
-         (tags-todo "")))
+         (alltodo "")))
         ("h" "Home-related tasks" tags-todo "home"
            ((org-agenda-files '("~/notes/tasks.org"))) ; For when I expand agenda files and want this to be quick.
            )
@@ -180,7 +179,11 @@
          :todo ("NEXT(n)")
          :face (:foreground "#6C71C4")
          :order 3)
-        (:order-multi (4 (:name "Work"
+        (:name "To Do"
+         :todo ("TODO(t)")
+         :face (:foreground "#DC322F")
+         :order 4)
+        (:order-multi (5 (:name "Work"
                           :and (:tag "postdoc"))
                          (:name "Writing"
                           :and (:tag "book" :tag "writing"))
@@ -190,9 +193,9 @@
                           :and (:tag "home"))
                       )
         )
-         (:name "Remaining Tasks"
-                :and (:todo "TODO"
-                      :not (:todo "postdoc" :todo "IN-PROGRESS" :todo "NEXT" :todo "reading" :todo "writing")))
+;         (:name "Remaining Tasks"
+;                :and (:todo "TODO"
+;                      :not (:todo "postdoc" :todo "IN-PROGRESS" :todo "NEXT" :todo "reading" :todo "writing")))
          (:todo "WAITING" :order 8)
        )
 )
@@ -212,7 +215,9 @@
 
 (use-package writeroom-mode
   :config
-  (setq writeroom-fullscreen-effect nil)
+  (setq writeroom-fullscreen-effect nil
+        writeroom-mode-line t
+        writeroom-width 80)
     )
 
 (map! :leader
