@@ -27,6 +27,8 @@
 ;  '(org-level-8 :foreground #af3a03)
 ;  )
 
+(setq +modeline-height 22)
+
 (after! org
  (add-hook 'org-mode-hook 'org-indent-mode)
  (setq org-directory "~/notes/"
@@ -207,11 +209,24 @@
 ; Make horizontal movement cross lines
 (setq-default evil-cross-lines t)
 
+(define-key evil-motion-state-map "s" 'evil-substitute)
+(define-key evil-motion-state-map "S" 'evil-change-whole-line)
+
 (global-set-key (kbd "C-<prior>") #'previous-buffer)
 (global-set-key (kbd "C-<next>") #'next-buffer)
 
-(define-key evil-motion-state-map "s" 'evil-substitute)
-(define-key evil-motion-state-map "S" 'evil-change-whole-line)
+(map! :map evil-window-map
+      "SPC" #'rotate-layout
+      ;; Navigation
+      "<left>"  #'evil-window-left
+      "<down>"  #'evil-window-down
+      "<up>"    #'evil-window-up
+      "<right>" #'evil-window-right
+      ;; Swapping windows
+      "C-<left>"      #'+evil/window-move-left
+      "C-<down>"      #'+evil/window-move-down
+      "C-<up>"        #'+evil/window-move-up
+      "C-<right>"     #'+evil/window-move-right)
 
 (use-package writeroom-mode
   :config
