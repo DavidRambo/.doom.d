@@ -60,3 +60,4 @@
 (package! visual-fill-column)
 (package! writeroom-mode)
 (package! org-super-agenda)
+(package! mixed-pitch)

@@ -3,12 +3,18 @@
 
 * Table of Contents :TOC:
 - [[#preamble][Preamble]]
+- [[#basic-settings][Basic Settings]]
+  - [[#finer-grained-undo][Finer grained undo]]
+  - [[#splitting-windows][Splitting Windows]]
 - [[#fonts][Fonts]]
 - [[#theme][Theme]]
 - [[#modeline][Modeline]]
 - [[#org-settings][Org Settings]]
-  - [[#after-org-most-of-my-settings][After Org: most of my settings]]
+  - [[#mixed-pitch-for-org][Mixed-Pitch for Org]]
+  - [[#set-org-directories][Set org directories]]
+  - [[#most-of-my-settings][Most of my settings]]
   - [[#turn-off-company][Turn off company]]
+  - [[#styling-quote-blocks-and-done-headlines][Styling quote blocks and DONE headlines]]
   - [[#line-numbers][Line numbers]]
   - [[#disable-line-highlighting][Disable line highlighting]]
   - [[#todos][TODOs]]
@@ -18,6 +24,7 @@
   - [[#custom-commands-for-org-agenda][Custom Commands for Org Agenda]]
   - [[#org-super-agenda][Org Super Agenda]]
 - [[#mappings][Mappings]]
+  - [[#esc-as-quit-key-c-g][ESC as quit key (C-g)]]
   - [[#normal-mode-navigation][Normal Mode Navigation]]
   - [[#s-as-substitute]["S" as substitute]]
   - [[#buffer-movement][Buffer Movement]]
@@ -60,13 +67,34 @@
       user-mail-address "davrambo@gmail.com")
  #+end_src
 
+* Basic Settings
+** Finer grained undo
+
+#+begin_src elisp
+(setq  evil-want-fine-undo t
+       undo-limit 80000000)
+#+end_src
+
+** Splitting Windows
+From https://github.com/sunnyhasija/Academic-Doom-Emacs-Config
+"The following code allows me to choose which buffer I want to see when I split a window. It first does a split to the right, and then opens Ivy and and shows me a preview."
+
+#+begin_src elisp
+(setq evil-vsplit-window-right t
+      evil-split-window-below t)
+(defadvice! prompt-for-buffer (&rest _)
+  :after '(evil-window-split evil-window-vsplit evil-window-new)
+  (+ivy/switch-buffer))
+(setq +ivy-buffer-preview t)
+#+end_src
+
 * Fonts
  Doom exposes five (optional) variables for controlling fonts in Doom. Here
  are the three important ones:
 
- + `doom-font'
- + `doom-variable-pitch-font'
- + `doom-big-font' -- used for `doom-big-font-mode'; use this for
+ - `doom-font'
+ - `doom-variable-pitch-font'
+ - `doom-big-font' -- used for `doom-big-font-mode'; use this for
    presentations or streaming.
 
  They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
@@ -74,17 +102,13 @@
  (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
        doom-variable-pitch-font (font-spec :family "sans" :size 13))
 
-I found that to make it work the way I like, I have custom font faces set in an org-mode specific section below.
+As explained by https://protesilaos.com/codelog/2020-09-05-emacs-note-mixed-font-heights/,
+the default font's height is taken as the base.
+So others can use a floating point :height value relative to it.
 
 #+begin_src  elisp
-(set-face-attribute 'default nil :font "SauceCodePro Nerd Font-14")
-;(set-face-attribute 'fixed-pitch nil :font "Ubuntu Mono-14")
-;(set-face-attribute 'variable-pitch nil :font "Source Sans Pro")
-;
-;(dolist (face '(default fixed-pitch))
-;  (set-face-attribute `,face nil :font "Ubuntu Mono-14"))
-;(dolist (face '(default variable-pitch))
-;  (set-face-attribute `,face nil :font "ETBembo"))
+(setq doom-font (font-spec :family "SauceCodePro Nerd Font" :height 160)
+      doom-variable-pitch-font (font-spec :family "Source Sans Pro"))
 #+end_src
 
 * Theme
@@ -100,6 +124,10 @@ There are two ways to load a theme. Both assume the theme is installed and
         doom-themes-enable-italic t
         doom-gruvbox-light-variant "hard"))
 #+end_src
+
+I do not know why, but all other themes lack colors for org headings.
+This snippet is intended to restore (?) colors to org headings in dark gruvbox.
+However, it prevents my config from loading beyond it (my mappings stop working, fonts don't load properly.)
 
 #+begin_src elisp
 ;(custom-theme-set-faces! 'doom-gruvbox
@@ -123,10 +151,26 @@ Make doom-modeline smaller.
 #+end_src
 
 * Org Settings
-** After Org: most of my settings
+** Mixed-Pitch for Org
+
+#+begin_src elisp
+(use-package! mixed-pitch
+  :hook (org-mode . mixed-pitch-mode)
+  :config
+        (setq mixed-pitch-set-height t)
+;        (set-face-attribute 'variable-pitch nil :height 160)
+        )
+#+end_src
+
+** Set org directories
+
+#+begin_src elisp
+(setq org-directory "~/notes/")
+#+end_src
+
+** Most of my settings
 This section establishes:
- * my org-directory,
- * source for org-agenda,
+ * source for org-agenda
  * fonts and other appearances
 
 Including my entire org notes directory in the agenda was too slow (at least the first time I loaded it up).
@@ -137,86 +181,99 @@ org-agenda-files '("~/notes/tasks.org" (files-expand-wildcards "~/notes/journal*
 #+begin_src elisp
 (after! org
  (add-hook 'org-mode-hook 'org-indent-mode)
- (setq org-directory "~/notes/"
+ (setq
        ;org-agenda-files (file-expand-wildcards "~/notes/*.org")
        org-agenda-files '("~/notes/tasks.org")
        org-hide-emphasis-markers t)
 
  (require 'org-inlinetask) ; C-c C-x t
 
- ;; Turn off quote block styling by toggling
- (setq org-fontify-quote-and-verse-blocks 'nil
-       org-fontify-done-headline t)
+; (let* ((variable-tuple
+;          (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+;                ((x-list-fonts "Ubuntu") '(:font "Ubuntu"))
+;                ((x-family-fonts "Serif")    '(:family "Serif"))
+;                (nil (warn "Cannot find a Sans Serif Font. Install Source Sans Pro."))))
+;         (headline           `(:inherit default :weight bold))
+;        )
+;
+;    (custom-theme-set-faces
+;     'user
+;;     `(org-level-8 ((t (,@headline ,@variable-tuple))))
+;;     `(org-level-7 ((t (,@headline ,@variable-tuple))))
+;;     `(org-level-6 ((t (,@headline ,@variable-tuple))))
+;;     `(org-level-5 ((t (,@headline ,@variable-tuple))))
+;;     `(org-level-4 ((t (,@headline ,@variable-tuple))))
+;     `(org-level-3 ((t (,@headline :size 16))))
+;     `(org-level-2 ((t (,@headline :size 16))))
+;     `(org-level-1 ((t (,@headline :size 18))))
+;     `(org-document-title ((t (,@headline ,@variable-tuple :height 1.1 :underline nil)))))
+; ) ; end (let*)
 
- (let* ((variable-tuple
-          (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-                ((x-list-fonts "Ubuntu") '(:font "Ubuntu"))
-                ((x-family-fonts "Serif")    '(:family "Serif"))
-                (nil (warn "Cannot find a Sans Serif Font. Install Source Sans Pro."))))
-         (headline           `(:inherit default :weight bold))
-        )
+; (custom-theme-set-faces
+;  'user
+;  '(variable-pitch ((t (:family "Source Sans Pro" :size 14 :weight regular))))
+;  '(fixed-pitch ((t ( :family "SauceCodePro Nerd Font" :size 12 :weight regular )))))
 
-    (custom-theme-set-faces
-     'user
-     `(org-level-8 ((t (,@headline ,@variable-tuple))))
-     `(org-level-7 ((t (,@headline ,@variable-tuple))))
-     `(org-level-6 ((t (,@headline ,@variable-tuple))))
-     `(org-level-5 ((t (,@headline ,@variable-tuple))))
-     `(org-level-4 ((t (,@headline ,@variable-tuple))))
-     `(org-level-3 ((t (,@headline ,@variable-tuple :size 16))))
-     `(org-level-2 ((t (,@headline ,@variable-tuple :size 16))))
-     `(org-level-1 ((t (,@headline ,@variable-tuple :size 18))))
-     `(org-document-title ((t (,@headline ,@variable-tuple :height 1.1 :underline nil)))))
- )
-
- (custom-theme-set-faces
-  'user
-  '(variable-pitch ((t (:family "Source Sans Pro" :size 16 :weight regular))))
-  '(fixed-pitch ((t ( :family "SauceCodePro Nerd Font" :size 12 :weight regular )))))
-
- (add-hook 'org-mode-hook 'variable-pitch-mode)
-
- (custom-theme-set-faces
-   'user
-;   '(org-default((t (:foreground "black"))))
-   '(org-block ((t (:inherit fixed-pitch))))
-   '(org-code ((t (:inherit (shadow fixed-pitch)))))
-   '(org-document-info ((t (:foreground "dark orange"))))
-   '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
-   '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
-   ;'(org-link ((t (:foreground "royal blue" :underline t))))
-   '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-   '(org-property-value ((t (:inherit fixed-pitch :size 14))) t)
-   '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-   '(org-table ((t (:inherit fixed-pitch :foreground "#83a598" :size 12))))
-   '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 0.8))))
-   '(org-verbatim ((t (:inherit (shadow fixed-pitch)))))
-) ; end custom-theme-set-faces
+; (custom-theme-set-faces
+;   'user
+;;   '(org-default((t (:foreground "black"))))
+;   '(org-block ((t (:inherit doom-font))))
+;   '(org-code ((t (:inherit (shadow fixed-pitch)))))
+;   '(org-document-info ((t (:foreground "dark orange"))))
+;   '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+;   '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+;   ;'(org-link ((t (:foreground "royal blue" :underline t))))
+;   '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+;   '(org-property-value ((t (:inherit fixed-pitch :size 14))) t)
+;   '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+;   '(org-table ((t (:inherit fixed-pitch :foreground "#83a598" :size 12))))
+;   '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 0.8))))
+;   '(org-verbatim ((t (:inherit (shadow fixed-pitch)))))
+;) ; end custom-theme-set-faces
 ) ; end after! org
 #+end_src
 
 ** Turn off company
+
 #+begin_src elisp
-(setq company-global-modes '(not org-mode))
+(after! org
+    (setq company-global-modes '(not org-mode)))
+#+end_src
+
+** Styling quote blocks and DONE headlines
+Turn off quote block styling.
+Change entire headline when set to "DONE" todo status
+#+begin_src elisp
+(after! org
+    (setq org-fontify-quote-and-verse-blocks 'nil
+          org-fontify-done-headline t))
 #+end_src
 
 ** Line numbers
+Update: Wow, it seems that going back to doom-font configuration and implementing the mixed-pitch package has fixed the uneven left-hand column.
+
  I had disabled display-line-numbers in favor of linum-mode because
- linum-mode works better with non-monospace fonts.
+ linum-mode works better with non-monospace fonts:
+~;(global-linum-mode t)~
+~;(setq linum-format "%2d ")~
  (The problem is that wrapped lines would move into the line number column.)
  However, that is being deprecated and apparently slows emacs way down when reaching a thousand lines.
 
 #+begin_src elisp
-(setq display-line-numbers-type nil)
+(setq display-line-numbers-type t)
 
-;(global-linum-mode t)
-;(setq linum-format "%2d ")
+; Disable line numbers for certain modes
+(dolist (mode '(org-mode-hook
+                term-mode-hook
+                eshell-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
 #+end_src
 
 I customized the color of the current line number as follows:
- - "M-x list-faces-display"
- - find "line-number-current-line" and press RET
- - set a new value and "Apply" or "Apply and Save"
+ 1. "M-x list-faces-display"
+ 2. find "line-number-current-line" and press RET
+ 3. set a new value and "Apply" or "Apply and Save"
+    a. I set "background" to "none" in order to get rid of the hl-line-mode highlighting.
 
 However, according to Eli Zaretskii, who wrote display-line-numbers, changing the face of the current line number disallows some of what makes this package more efficient than linum.
 
@@ -228,7 +285,9 @@ I can do it manually with the function `global-hl-line-mode` but it won't take w
 ;(add-hook 'org-mode-hook (lambda ()
 ;            (setq hl-line-mode nil)))
 #+end_src
+
 Above does not work either.
+Neither will ~(setq global-hl-line-mode nil)~.
 
 ** TODOs
 *** Keywords
@@ -241,7 +300,7 @@ Above does not work either.
 )
 #+end_src
 
-*** Custom Faces
+*** Custom TODO Faces
 For adjusting the entire heading with a "DONE" todo-tag, the official code would not work so I used the customize menu.
 To get to it, do: "M-x org-customize" > Org Appearance > Org Faces > Org Headline Done
 Org Fontify Done Headline was already set to true, but it can be found under "Org Appearance" if not.
@@ -330,6 +389,8 @@ Basic configuration.
 
 *** Groups for Org Super Agenda
 
+ * TODO: Fix how TODOs are grouped. Currently, they list them under the parent heading. But I also have inexplicable inclusions/exclusions for different tags.
+
 #+begin_src elisp
 (setq org-super-agenda-groups
       '((:name "Today"
@@ -369,6 +430,12 @@ Basic configuration.
 #+end_src
 
 * Mappings
+** ESC as quit key (C-g)
+
+#+begin_src elisp
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+#+end_src
+
 ** Normal Mode Navigation
 In Vim on Linux, I could navigate in normal mode without skipping wrapped lines by mapping h/j/k/l to g+<h/j/k/l>.
 This won't work here because "g" plus an evil-movement jumps to the next item or heading.
@@ -386,6 +453,9 @@ In evil-mode, the arrows move in this way in insert mode.
 It's still a little wonky, presumably because of the variable-face font I'm using.
 (Actually, it still skips around horizontally when moving vertically even with a monoface font.)
 Scrolling up and down does not always remain in the correct column.
+
+Update: after removing a bunch of my custom face settings and installing the mixed-pitch package, it seems to work fine.
+
 ** "S" as substitute
 Disable evil-snipe so that "s" can be used as evil-substitute
 I put the following in packages.el:

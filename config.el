@@ -1,14 +1,18 @@
 (setq user-full-name "David Rambo"
       user-mail-address "davrambo@gmail.com")
 
-(set-face-attribute 'default nil :font "SauceCodePro Nerd Font-14")
-;(set-face-attribute 'fixed-pitch nil :font "Ubuntu Mono-14")
-;(set-face-attribute 'variable-pitch nil :font "Source Sans Pro")
-;
-;(dolist (face '(default fixed-pitch))
-;  (set-face-attribute `,face nil :font "Ubuntu Mono-14"))
-;(dolist (face '(default variable-pitch))
-;  (set-face-attribute `,face nil :font "ETBembo"))
+(setq  evil-want-fine-undo t
+       undo-limit 80000000)
+
+(setq evil-vsplit-window-right t
+      evil-split-window-below t)
+(defadvice! prompt-for-buffer (&rest _)
+  :after '(evil-window-split evil-window-vsplit evil-window-new)
+  (+ivy/switch-buffer))
+(setq +ivy-buffer-preview t)
+
+(setq doom-font (font-spec :family "SauceCodePro Nerd Font" :height 160)
+      doom-variable-pitch-font (font-spec :family "Source Sans Pro"))
 
 (setq doom-theme 'doom-gruvbox-light)
 (after! doom-themes
@@ -29,71 +33,82 @@
 
 (setq +modeline-height 22)
 
+(use-package! mixed-pitch
+  :hook (org-mode . mixed-pitch-mode)
+  :config
+        (setq mixed-pitch-set-height t)
+;        (set-face-attribute 'variable-pitch nil :height 160)
+        )
+
+(setq org-directory "~/notes/")
+
 (after! org
  (add-hook 'org-mode-hook 'org-indent-mode)
- (setq org-directory "~/notes/"
+ (setq
        ;org-agenda-files (file-expand-wildcards "~/notes/*.org")
        org-agenda-files '("~/notes/tasks.org")
        org-hide-emphasis-markers t)
 
  (require 'org-inlinetask) ; C-c C-x t
 
- ;; Turn off quote block styling by toggling
- (setq org-fontify-quote-and-verse-blocks 'nil
-       org-fontify-done-headline t)
+; (let* ((variable-tuple
+;          (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+;                ((x-list-fonts "Ubuntu") '(:font "Ubuntu"))
+;                ((x-family-fonts "Serif")    '(:family "Serif"))
+;                (nil (warn "Cannot find a Sans Serif Font. Install Source Sans Pro."))))
+;         (headline           `(:inherit default :weight bold))
+;        )
+;
+;    (custom-theme-set-faces
+;     'user
+;;     `(org-level-8 ((t (,@headline ,@variable-tuple))))
+;;     `(org-level-7 ((t (,@headline ,@variable-tuple))))
+;;     `(org-level-6 ((t (,@headline ,@variable-tuple))))
+;;     `(org-level-5 ((t (,@headline ,@variable-tuple))))
+;;     `(org-level-4 ((t (,@headline ,@variable-tuple))))
+;     `(org-level-3 ((t (,@headline :size 16))))
+;     `(org-level-2 ((t (,@headline :size 16))))
+;     `(org-level-1 ((t (,@headline :size 18))))
+;     `(org-document-title ((t (,@headline ,@variable-tuple :height 1.1 :underline nil)))))
+; ) ; end (let*)
 
- (let* ((variable-tuple
-          (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-                ((x-list-fonts "Ubuntu") '(:font "Ubuntu"))
-                ((x-family-fonts "Serif")    '(:family "Serif"))
-                (nil (warn "Cannot find a Sans Serif Font. Install Source Sans Pro."))))
-         (headline           `(:inherit default :weight bold))
-        )
+; (custom-theme-set-faces
+;  'user
+;  '(variable-pitch ((t (:family "Source Sans Pro" :size 14 :weight regular))))
+;  '(fixed-pitch ((t ( :family "SauceCodePro Nerd Font" :size 12 :weight regular )))))
 
-    (custom-theme-set-faces
-     'user
-     `(org-level-8 ((t (,@headline ,@variable-tuple))))
-     `(org-level-7 ((t (,@headline ,@variable-tuple))))
-     `(org-level-6 ((t (,@headline ,@variable-tuple))))
-     `(org-level-5 ((t (,@headline ,@variable-tuple))))
-     `(org-level-4 ((t (,@headline ,@variable-tuple))))
-     `(org-level-3 ((t (,@headline ,@variable-tuple :size 16))))
-     `(org-level-2 ((t (,@headline ,@variable-tuple :size 16))))
-     `(org-level-1 ((t (,@headline ,@variable-tuple :size 18))))
-     `(org-document-title ((t (,@headline ,@variable-tuple :height 1.1 :underline nil)))))
- )
-
- (custom-theme-set-faces
-  'user
-  '(variable-pitch ((t (:family "Source Sans Pro" :size 16 :weight regular))))
-  '(fixed-pitch ((t ( :family "SauceCodePro Nerd Font" :size 12 :weight regular )))))
-
- (add-hook 'org-mode-hook 'variable-pitch-mode)
-
- (custom-theme-set-faces
-   'user
-;   '(org-default((t (:foreground "black"))))
-   '(org-block ((t (:inherit fixed-pitch))))
-   '(org-code ((t (:inherit (shadow fixed-pitch)))))
-   '(org-document-info ((t (:foreground "dark orange"))))
-   '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
-   '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
-   ;'(org-link ((t (:foreground "royal blue" :underline t))))
-   '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-   '(org-property-value ((t (:inherit fixed-pitch :size 14))) t)
-   '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-   '(org-table ((t (:inherit fixed-pitch :foreground "#83a598" :size 12))))
-   '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 0.8))))
-   '(org-verbatim ((t (:inherit (shadow fixed-pitch)))))
-) ; end custom-theme-set-faces
+; (custom-theme-set-faces
+;   'user
+;;   '(org-default((t (:foreground "black"))))
+;   '(org-block ((t (:inherit doom-font))))
+;   '(org-code ((t (:inherit (shadow fixed-pitch)))))
+;   '(org-document-info ((t (:foreground "dark orange"))))
+;   '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+;   '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+;   ;'(org-link ((t (:foreground "royal blue" :underline t))))
+;   '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+;   '(org-property-value ((t (:inherit fixed-pitch :size 14))) t)
+;   '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+;   '(org-table ((t (:inherit fixed-pitch :foreground "#83a598" :size 12))))
+;   '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 0.8))))
+;   '(org-verbatim ((t (:inherit (shadow fixed-pitch)))))
+;) ; end custom-theme-set-faces
 ) ; end after! org
 
-(setq company-global-modes '(not org-mode))
+(after! org
+    (setq company-global-modes '(not org-mode)))
 
-(setq display-line-numbers-type nil)
+(after! org
+    (setq org-fontify-quote-and-verse-blocks 'nil
+          org-fontify-done-headline t))
 
-;(global-linum-mode t)
-;(setq linum-format "%2d ")
+(setq display-line-numbers-type t)
+
+; Disable line numbers for certain modes
+(dolist (mode '(org-mode-hook
+                term-mode-hook
+                eshell-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 ;(add-hook 'org-mode-hook (lambda ()
 ;            (setq hl-line-mode nil)))
@@ -201,6 +216,8 @@
          (:todo "WAITING" :order 8)
        )
 )
+
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
 (define-key evil-normal-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
 (define-key evil-normal-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
