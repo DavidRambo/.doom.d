@@ -252,7 +252,7 @@ Above does not work either.
 Neither will ~(setq global-hl-line-mode nil)~.
 
 ** TODOs
-*** Keywords
+*** Keywords and Priority
 #+begin_src elisp
 (after! org
  (setq org-todo-keywords
@@ -260,6 +260,7 @@ Neither will ~(setq global-hl-line-mode nil)~.
                (sequence "READ(r)" "READING(g)")
                (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING")))
   )
+ (setq org-lowest-priority ?C) ;; This is the default.
 )
 #+end_src
 

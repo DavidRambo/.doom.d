@@ -79,6 +79,7 @@
                (sequence "READ(r)" "READING(g)")
                (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING")))
   )
+ (setq org-lowest-priority ?C)
 )
 
 (after! org
