@@ -90,7 +90,7 @@
 (after! org
  (setq org-todo-keywords
        (quote ((sequence "TODO(t)" "NEXT(n)" "IN-PROGRESS(i)" "|" "DONE(d)")
-               (sequence "READ(r)" "READING(g)")
+               (sequence " READ(r)" " READING(g)")
                (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING")))
   )
  (setq org-lowest-priority ?C) ;; This is the default.
@@ -102,8 +102,8 @@
     ("NEXT" . (:foreground "#B16286" :weight italic))
     ("IN-PROGRESS" . (:foreground "#458588" :weight italic))
     ("DONE" . (:foreground "#8EC07C" :weight light :strike-through t))
-    ("READ" . (:foreground "#D79921" :weight light))
-    ("READING" . (:foreground "#FABD2F" :weight regular))
+    (" READ" . (:foreground "#D79921" :weight light))
+    (" READING" . (:foreground "#FABD2F" :weight regular))
    )
  )
 )
@@ -121,8 +121,8 @@
                   ("[ ]" . 9744)
                   ("DONE" . 9745)
                   ("[X]" . 9745)
-                  ("READ" . ?)
-                  ("READING" . ?龎)
+                  (" READ" . ?)
+                  (" READING" . ?龎)
                   ("NEXT" . 9744)
                   ("IN-PROGRESS" . ?))
         org-superstar-item-bullet-alist
