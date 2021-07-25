@@ -14,7 +14,7 @@
 (setq doom-font (font-spec :family "SauceCodePro Nerd Font" :height 140)
       doom-variable-pitch-font (font-spec :family "Source Sans Pro" :height 160))
 
-(setq doom-theme 'doom-gruvbox-light)
+(setq doom-theme 'doom-gruvbox)
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t
@@ -47,52 +47,11 @@
  (setq
        ;org-agenda-files (file-expand-wildcards "~/notes/*.org")
        org-agenda-files '("~/notes/tasks.org")
-       org-hide-emphasis-markers t)
+       org-hide-emphasis-markers t
+       )
 
  (require 'org-inlinetask) ; C-c C-x t
 
-; (let* ((variable-tuple
-;          (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-;                ((x-list-fonts "Ubuntu") '(:font "Ubuntu"))
-;                ((x-family-fonts "Serif")    '(:family "Serif"))
-;                (nil (warn "Cannot find a Sans Serif Font. Install Source Sans Pro."))))
-;         (headline           `(:inherit default :weight bold))
-;        )
-;
-;    (custom-theme-set-faces
-;     'user
-;;     `(org-level-8 ((t (,@headline ,@variable-tuple))))
-;;     `(org-level-7 ((t (,@headline ,@variable-tuple))))
-;;     `(org-level-6 ((t (,@headline ,@variable-tuple))))
-;;     `(org-level-5 ((t (,@headline ,@variable-tuple))))
-;;     `(org-level-4 ((t (,@headline ,@variable-tuple))))
-;     `(org-level-3 ((t (,@headline :size 16))))
-;     `(org-level-2 ((t (,@headline :size 16))))
-;     `(org-level-1 ((t (,@headline :size 18))))
-;     `(org-document-title ((t (,@headline ,@variable-tuple :height 1.1 :underline nil)))))
-; ) ; end (let*)
-
-; (custom-theme-set-faces
-;  'user
-;  '(variable-pitch ((t (:family "Source Sans Pro" :size 14 :weight regular))))
-;  '(fixed-pitch ((t ( :family "SauceCodePro Nerd Font" :size 12 :weight regular )))))
-
-; (custom-theme-set-faces
-;   'user
-;;   '(org-default((t (:foreground "black"))))
-;   '(org-block ((t (:inherit doom-font))))
-;   '(org-code ((t (:inherit (shadow fixed-pitch)))))
-;   '(org-document-info ((t (:foreground "dark orange"))))
-;   '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
-;   '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
-;   ;'(org-link ((t (:foreground "royal blue" :underline t))))
-;   '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-;   '(org-property-value ((t (:inherit fixed-pitch :size 14))) t)
-;   '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-;   '(org-table ((t (:inherit fixed-pitch :foreground "#83a598" :size 12))))
-;   '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 0.8))))
-;   '(org-verbatim ((t (:inherit (shadow fixed-pitch)))))
-;) ; end custom-theme-set-faces
 ) ; end after! org
 
 (after! org
@@ -176,6 +135,7 @@
         org-agenda-block-separator 9472
         org-agenda-tags-column 100
         org-agenda-compact-blocks nil
+        org-agenda-dim-blocked-tasks nil
         )
   :config
   (org-super-agenda-mode)
