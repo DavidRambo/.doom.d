@@ -1,6 +1,6 @@
 #+TITLE: Literate Config
 #+PROPERTY: header-args :tangle config.el
-#+STARTUP: overview
+#+STARTUP: content
 
 * Table of Contents :TOC:
 - [[#preamble][Preamble]]
