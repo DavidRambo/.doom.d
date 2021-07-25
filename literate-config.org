@@ -20,6 +20,7 @@
   - [[#disable-line-highlighting][Disable line highlighting]]
   - [[#todos][TODOs]]
   - [[#bullets][Bullets]]
+  - [[#prettify-symbols][Prettify symbols]]
   - [[#deft][Deft]]
   - [[#org-journal][Org Journal]]
   - [[#custom-commands-for-org-agenda][Custom Commands for Org Agenda]]
@@ -119,7 +120,7 @@ There are two ways to load a theme. Both assume the theme is installed and
 (setq doom-theme 'doom-one)
 
 #+begin_src elisp
-(setq doom-theme 'doom-gruvbox)
+(setq doom-theme 'doom-gruvbox-light)
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t
@@ -186,6 +187,7 @@ org-agenda-files '("~/notes/tasks.org" (files-expand-wildcards "~/notes/journal*
        ;org-agenda-files (file-expand-wildcards "~/notes/*.org")
        org-agenda-files '("~/notes/tasks.org")
        org-hide-emphasis-markers t
+       org-startup-folded 'content
        )
 
  (require 'org-inlinetask) ; C-c C-x t
@@ -255,6 +257,7 @@ Neither will ~(setq global-hl-line-mode nil)~.
 (after! org
  (setq org-todo-keywords
        (quote ((sequence "TODO(t)" "NEXT(n)" "IN-PROGRESS(i)" "|" "DONE(d)")
+               (sequence "READ(r)" "READING(g)")
                (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING")))
   )
 )
@@ -267,10 +270,12 @@ Org Fontify Done Headline was already set to true, but it can be found under "Or
 #+begin_src elisp
 (after! org
  (setq org-todo-keyword-faces
-  '(("TODO" . (:foreground "#DC322F" :weight regular))
-    ("NEXT" . (:foreground "#6C71C4" :weight bold))
-    ("IN-PROGRESS" . (:foreground "#2AA198" :weight bold))
-    ("DONE" . (:foreground "#427b58" :weight light))
+  '(("TODO" . (:foreground "#FB4934" :weight regular))
+    ("NEXT" . (:foreground "#B16286" :weight bold))
+    ("IN-PROGRESS" . (:foreground "#458588" :weight bold))
+    ("DONE" . (:foreground "#8EC07C" :weight light))
+    ("READ" . (:foreground "#D79921" :weight light))
+    ("READING" . (:foreground "#FABD2F" :weight regular))
    )
  )
 )
@@ -284,6 +289,19 @@ Org Fontify Done Headline was already set to true, but it can be found under "Or
     org-superstar-first-inlinetask-bullet '("-")
  ;   org-superstar-item-bullet-alist '("•")
     :hook (org-mode . org-bullets-mode))
+#+end_src
+
+** Prettify symbols
+
+#+begin_src elisp
+(use-package! prettify-symbols-mode
+  :custom
+ ; (push '("[ ]" .  "☐") prettify-symbols-alist)
+  prettify-symbols-alist '(("[ ]" . "☐")
+                          ("[X]" . "☑")
+                          ("[-]" . "❍"))
+  :hook (org-mode . prettify-symbols-mode)
+)
 #+end_src
 
 ** Deft

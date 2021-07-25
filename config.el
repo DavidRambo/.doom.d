@@ -14,7 +14,7 @@
 (setq doom-font (font-spec :family "SauceCodePro Nerd Font" :height 140)
       doom-variable-pitch-font (font-spec :family "Source Sans Pro" :height 160))
 
-(setq doom-theme 'doom-gruvbox)
+(setq doom-theme 'doom-gruvbox-light)
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t
@@ -48,6 +48,7 @@
        ;org-agenda-files (file-expand-wildcards "~/notes/*.org")
        org-agenda-files '("~/notes/tasks.org")
        org-hide-emphasis-markers t
+       org-startup-folded 'content
        )
 
  (require 'org-inlinetask) ; C-c C-x t
@@ -75,16 +76,19 @@
 (after! org
  (setq org-todo-keywords
        (quote ((sequence "TODO(t)" "NEXT(n)" "IN-PROGRESS(i)" "|" "DONE(d)")
+               (sequence "READ(r)" "READING(g)")
                (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING")))
   )
 )
 
 (after! org
  (setq org-todo-keyword-faces
-  '(("TODO" . (:foreground "#DC322F" :weight regular))
-    ("NEXT" . (:foreground "#6C71C4" :weight bold))
-    ("IN-PROGRESS" . (:foreground "#2AA198" :weight bold))
-    ("DONE" . (:foreground "#427b58" :weight light))
+  '(("TODO" . (:foreground "#FB4934" :weight regular))
+    ("NEXT" . (:foreground "#B16286" :weight bold))
+    ("IN-PROGRESS" . (:foreground "#458588" :weight bold))
+    ("DONE" . (:foreground "#8EC07C" :weight light))
+    ("READ" . (:foreground "#D79921" :weight light))
+    ("READING" . (:foreground "#FABD2F" :weight regular))
    )
  )
 )
@@ -95,6 +99,15 @@
     org-superstar-first-inlinetask-bullet '("-")
  ;   org-superstar-item-bullet-alist '("•")
     :hook (org-mode . org-bullets-mode))
+
+(use-package! prettify-symbols-mode
+  :custom
+ ; (push '("[ ]" .  "☐") prettify-symbols-alist)
+  prettify-symbols-alist '(("[ ]" . "☐")
+                          ("[X]" . "☑")
+                          ("[-]" . "❍"))
+  :hook (org-mode . prettify-symbols-mode)
+)
 
 (setq deft-directory "~/notes/"
       deft-extensions '("org")
