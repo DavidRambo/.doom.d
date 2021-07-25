@@ -104,11 +104,11 @@ From https://github.com/sunnyhasija/Academic-Doom-Emacs-Config
 
 As explained by https://protesilaos.com/codelog/2020-09-05-emacs-note-mixed-font-heights/,
 the default font's height is taken as the base.
-So others can use a floating point :height value relative to it.
+So others can use a floating point ~:height~ value relative to it.
 
 #+begin_src  elisp
-(setq doom-font (font-spec :family "SauceCodePro Nerd Font" :height 160)
-      doom-variable-pitch-font (font-spec :family "Source Sans Pro"))
+(setq doom-font (font-spec :family "SauceCodePro Nerd Font" :height 140)
+      doom-variable-pitch-font (font-spec :family "Source Sans Pro" :height 160))
 #+end_src
 
 * Theme
@@ -158,7 +158,7 @@ Make doom-modeline smaller.
   :hook (org-mode . mixed-pitch-mode)
   :config
         (setq mixed-pitch-set-height t)
-;        (set-face-attribute 'variable-pitch nil :height 160)
+        (set-face-attribute 'variable-pitch nil :height 160)
         )
 #+end_src
 

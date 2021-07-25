@@ -11,8 +11,8 @@
   (+ivy/switch-buffer))
 (setq +ivy-buffer-preview t)
 
-(setq doom-font (font-spec :family "SauceCodePro Nerd Font" :height 160)
-      doom-variable-pitch-font (font-spec :family "Source Sans Pro"))
+(setq doom-font (font-spec :family "SauceCodePro Nerd Font" :height 140)
+      doom-variable-pitch-font (font-spec :family "Source Sans Pro" :height 160))
 
 (setq doom-theme 'doom-gruvbox-light)
 (after! doom-themes
@@ -37,7 +37,7 @@
   :hook (org-mode . mixed-pitch-mode)
   :config
         (setq mixed-pitch-set-height t)
-;        (set-face-attribute 'variable-pitch nil :height 160)
+        (set-face-attribute 'variable-pitch nil :height 160)
         )
 
 (setq org-directory "~/notes/")
