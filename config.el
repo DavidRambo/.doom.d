@@ -49,7 +49,20 @@
        org-agenda-files '("~/notes/tasks.org")
        org-hide-emphasis-markers t
        org-startup-folded 'content
+;       line-spacing 0.3
+       org-bullets-face-name doom-font
        )
+
+ (custom-set-faces
+  '(org-block ((t (:inherit doom-font))))
+  ;'(org-code ((t (:inherit shadow doom-font))))
+  '(org-code ((t (:inherit doom-font))))
+  '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+  '(org-document-title ((t (:inherit default :weight bold :height 1.1 :underline nil))))
+;  '(org-document-info ((t (:foreground "dark orange"))))
+  '(line-number-current-line ((t (:inherit (hl-line default) :background "none" :foreground "orange" :strike-through nil :underline nil :slant normal :weight normal))))
+ '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 0.8))))
+ )
 
  (require 'org-inlinetask) ; C-c C-x t
 
@@ -59,8 +72,9 @@
     (setq company-global-modes '(not org-mode)))
 
 (after! org
-    (setq org-fontify-quote-and-verse-blocks 'nil
-          org-fontify-done-headline t))
+  (setq org-fontify-quote-and-verse-blocks 'nil
+        org-fontify-done-headline t)
+        org-fontify-todo-headline t)
 
 (setq display-line-numbers-type t)
 
@@ -79,15 +93,15 @@
                (sequence "READ(r)" "READING(g)")
                (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING")))
   )
- (setq org-lowest-priority ?C)
+ (setq org-lowest-priority ?C) ;; This is the default.
 )
 
 (after! org
  (setq org-todo-keyword-faces
   '(("TODO" . (:foreground "#FB4934" :weight regular))
-    ("NEXT" . (:foreground "#B16286" :weight bold))
-    ("IN-PROGRESS" . (:foreground "#458588" :weight bold))
-    ("DONE" . (:foreground "#8EC07C" :weight light))
+    ("NEXT" . (:foreground "#B16286" :weight italic))
+    ("IN-PROGRESS" . (:foreground "#458588" :weight italic))
+    ("DONE" . (:foreground "#8EC07C" :weight light :strike-through t))
     ("READ" . (:foreground "#D79921" :weight light))
     ("READING" . (:foreground "#FABD2F" :weight regular))
    )
@@ -95,15 +109,32 @@
 )
 
 (use-package! org-superstar-mode
-    :custom
+  :custom
     org-superstar-headline-bullets-list '("◉" "○" "⁖" "◌" "◿")
     org-superstar-first-inlinetask-bullet '("-")
- ;   org-superstar-item-bullet-alist '("•")
-    :hook (org-mode . org-bullets-mode))
+  :hook (org-mode . org-bullets-mode))
+
+(after! org-superstar
+  (setq org-superstar-special-todo-items t
+        org-superstar-todo-bullet-alist
+                '(("TODO" . 9744)
+                  ("[ ]" . 9744)
+                  ("DONE" . 9745)
+                  ("[X]" . 9745)
+                  ("READ" . ?)
+                  ("READING" . ?龎)
+                  ("NEXT" . 9744)
+                  ("IN-PROGRESS" . ?))
+        org-superstar-item-bullet-alist
+                '((?* . ?•)
+                  (?+ . ?○)
+                  (?- . ?–))
+    )
+)
 
 (use-package! prettify-symbols-mode
   :custom
- ; (push '("[ ]" .  "☐") prettify-symbols-alist)
+; ; (push '("[ ]" .  "☐") prettify-symbols-alist)
   prettify-symbols-alist '(("[ ]" . "☐")
                           ("[X]" . "☑")
                           ("[-]" . "❍"))
