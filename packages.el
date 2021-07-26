@@ -61,3 +61,4 @@
 (package! writeroom-mode)
 (package! org-super-agenda)
 (package! mixed-pitch)
+(package! eterm-256color)
