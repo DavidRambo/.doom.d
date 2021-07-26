@@ -11,6 +11,16 @@
   (+ivy/switch-buffer))
 (setq +ivy-buffer-preview t)
 
+(use-package vterm
+  :commands vterm
+  :config
+  (setq term-prompt-regex "^[^#$%>\n]*[#$%>] *")
+  ;(setq vterm-max-scrollback 10000)
+)
+
+(use-package eterm-256color
+  :hook (vterm-mode . eterm-256color-mode))
+
 (setq doom-font (font-spec :family "SauceCodePro Nerd Font" :height 140)
       doom-variable-pitch-font (font-spec :family "Source Sans Pro" :height 160))
 
@@ -60,8 +70,9 @@
   '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
   '(org-document-title ((t (:inherit default :weight bold :height 1.1 :underline nil))))
 ;  '(org-document-info ((t (:foreground "dark orange"))))
-  '(line-number-current-line ((t (:inherit (hl-line default) :background "none" :foreground "orange" :strike-through nil :underline nil :slant normal :weight normal))))
- '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 0.8))))
+  '(line-number-current-line ((t (:inherit (hl-line default) :foreground "orange" :strike-through nil :underline nil :slant normal :weight normal))))
+  '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 0.8))))
+  '(org-property-value ((t (:inherit (fixed-pitch) :weight regular :height 0.8))))
  )
 
  (require 'org-inlinetask) ; C-c C-x t
@@ -82,7 +93,7 @@
 (dolist (mode '(org-mode-hook
                 term-mode-hook
                 eshell-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+  (add-hook mode (lambda () (display-line-numbers-mode 'relative))))
 
 ;(add-hook 'org-mode-hook (lambda ()
 ;            (setq hl-line-mode nil)))
@@ -99,11 +110,12 @@
 (after! org
  (setq org-todo-keyword-faces
   '(("TODO" . (:foreground "#FB4934" :weight regular))
-    ("NEXT" . (:foreground "#B16286" :weight italic))
-    ("IN-PROGRESS" . (:foreground "#458588" :weight italic))
+    ("NEXT" . (:foreground "#B16286" :slant italic))
+    ("IN-PROGRESS" . (:foreground "#458588" :slant italic))
     ("DONE" . (:foreground "#8EC07C" :weight light :strike-through t))
     (" READ" . (:foreground "#D79921" :weight light))
     (" READING" . (:foreground "#FABD2F" :weight regular))
+    ("WAITING" . (:foreground "black" :weight light))
    )
  )
 )
@@ -121,8 +133,8 @@
                   ("[ ]" . 9744)
                   ("DONE" . 9745)
                   ("[X]" . 9745)
-                  (" READ" . ?)
-                  (" READING" . ?龎)
+                  (" READ" . ? )
+                  (" READING" . ?龎 )
                   ("NEXT" . 9744)
                   ("IN-PROGRESS" . ?))
         org-superstar-item-bullet-alist
@@ -157,16 +169,16 @@
   (setq org-journal-enable-agenda-integration nil)
 )
 
-(setq org-agenda-custom-commands
+    (setq org-agenda-custom-commands
       '(("n" "Agenda and all TODOs"
          ((agenda "")
          (alltodo "")))
-        ("h" "Home-related tasks" tags-todo "home"
+        ("h" "Home-related tasks" tags "home"
            ((org-agenda-files '("~/notes/tasks.org"))) ; For when I expand agenda files and want this to be quick.
            )
-        ("w" "Work-related tasks" tags-todo "postdoc|book")
-        ("b" "Book-related tasks" tags-todo "book")
-        ("r" "Reading tasks" tags-todo "reading"))
+        ("w" "Work-related tasks" tags "postdoc|book")
+        ("b" "Book-related tasks" tags "book")
+        ("r" "Reading tasks" tags "reading"))
 )
 
 (use-package! org-super-agenda
@@ -181,6 +193,7 @@
         org-agenda-tags-column 100
         org-agenda-compact-blocks nil
         org-agenda-dim-blocked-tasks nil
+        org-agenda-start-on-weekday 0
         )
   :config
   (org-super-agenda-mode)
