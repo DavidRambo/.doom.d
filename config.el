@@ -5,7 +5,7 @@
       doom-variable-pitch-font (font-spec :family "Source Sans Pro" :height 160 :weight 'regular)
       doom-serif-font (font-spec :family "DejaVu Serif" :height 160))
 
-(setq doom-theme 'doom-gruvbox-light)
+(setq doom-theme 'doom-gruvbox)
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t
@@ -23,6 +23,36 @@
   :after '(evil-window-split evil-window-vsplit evil-window-new)
   (+ivy/switch-buffer))
 (setq +ivy-buffer-preview t)
+
+(setq split-height-threshold nil)
+(setq split-width-threshold 0)
+
+(defun toggle-window-split ()
+  (interactive)
+  (if (= (count-windows) 2)
+      (let* ((this-win-buffer (window-buffer))
+         (next-win-buffer (window-buffer (next-window)))
+         (this-win-edges (window-edges (selected-window)))
+         (next-win-edges (window-edges (next-window)))
+         (this-win-2nd (not (and (<= (car this-win-edges)
+                     (car next-win-edges))
+                     (<= (cadr this-win-edges)
+                     (cadr next-win-edges)))))
+         (splitter
+          (if (= (car this-win-edges)
+             (car (window-edges (next-window))))
+          'split-window-horizontally
+        'split-window-vertically)))
+    (delete-other-windows)
+    (let ((first-win (selected-window)))
+      (funcall splitter)
+      (if this-win-2nd (other-window 1))
+      (set-window-buffer (selected-window) this-win-buffer)
+      (set-window-buffer (next-window) next-win-buffer)
+      (select-window first-win)
+      (if this-win-2nd (other-window 1))))))
+
+(global-set-key (kbd "C-x |") 'toggle-window-split)
 
 (use-package vterm
   :commands vterm
@@ -149,8 +179,8 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 (after! org
  (setq org-todo-keyword-faces
   '(("TODO" . (:foreground "#FB4934" :weight regular))
-    ("NEXT" . (:foreground "#B16286" :slant italic))
-    ("IN-PROGRESS" . (:foreground "#458588" :slant italic))
+    ("NEXT" . (:foreground "#458588" :slant italic))
+    ("IN-PROGRESS" . (:foreground "#076678" :slant italic))
     ("DONE" . (:foreground "#8EC07C" :weight light :strike-through t))
     (" READ" . (:foreground "#b16286" :weight regular))
     (" READING" . (:foreground "#8f3f71" :weight regular))
