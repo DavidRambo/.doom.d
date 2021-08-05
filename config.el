@@ -71,6 +71,15 @@
   ;; I prefer search matching to be ordered; it's more precise
   (add-to-list 'ivy-re-builders-alist '(counsel-projectile-find-file . ivy--regex-plus)))
 
+(use-package dired
+  :ensure nil
+  :commands dired dired-jump
+  :custom ((dired-listing-switches -agho --group-directories-first))
+  :config
+     (evil-collection-define-key 'normal 'dired-mode-map
+      "h" 'dired-single-up-directory
+      "l" 'dired-single-buffer))
+
 ;(use-package! mixed-pitch
 ;  :hook (org-mode . mixed-pitch-mode)
 ;  :config
@@ -335,7 +344,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 
 (after! avy
   ;; home row priorities: 8 6 4 5 - - 1 2 3 7
-  (setq avy-keys '(?n ?e ?i ?s ?t ?r ?o ?a)))
+  (setq avy-keys '(?t ?e ?i ?s ?n ?r ?o ?a)))
 
 (use-package writeroom-mode
   :config

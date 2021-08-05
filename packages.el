@@ -62,3 +62,4 @@
 (package! org-super-agenda)
 (package! mixed-pitch)
 (package! eterm-256color)
+(package! dired-single)
