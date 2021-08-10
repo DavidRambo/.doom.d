@@ -63,3 +63,6 @@
 (package! mixed-pitch)
 (package! eterm-256color)
 (package! dired-single)
+(package! org-tree-slide)
+(package! org-roam)
+(package! org-sidebar)

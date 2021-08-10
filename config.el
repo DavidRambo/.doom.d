@@ -5,14 +5,15 @@
       doom-variable-pitch-font (font-spec :family "Source Sans Pro" :height 160 :weight 'regular)
       doom-serif-font (font-spec :family "DejaVu Serif" :height 160))
 
-(setq doom-theme 'doom-gruvbox)
+(setq doom-theme 'doom-gruvbox-light)
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t
-        doom-gruvbox-light-variant "hard"))
+        doom-gruvbox-light-variant "medium"))
 
-;(custom-set-faces!
-;  '(doom-modeline-buffer-modified :foreground "orange"))
+(setq fring-mode 'default)
+
+(setq global-hl-line-mode 'nil)
 
 (setq  evil-want-fine-undo t
        undo-limit 80000000)
@@ -148,8 +149,9 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
   '(org-document-title ((t (:inherit default :weight bold :height 1.1 :underline nil))))
 ;  '(org-document-info ((t (:foreground "dark orange"))))
   '(line-number-current-line ((t (:inherit (hl-line default) :background "none" :strike-through nil :underline nil :slant normal :weight normal))))
-  '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 0.8))))
-  '(org-property-value ((t (:inherit (fixed-pitch) :weight regular :height 0.8))))
+  '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 1.0))))
+  '(org-property-value ((t (:inherit (fixed-pitch) :weight regular :height 1.0))))
+  '(org-special-keyword ((t (:inherit (fixed-pitch) :weight regular :height 1.0))))
  )
 
  (require 'org-inlinetask) ; C-c C-x t
@@ -314,6 +316,86 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
        )
 )
 
+(use-package hide-mode-line)
+
+(defun efs/presentation-setup ()
+  ;; Hide the mode line
+  (hide-mode-line-mode 1)
+
+  ;; Display images inline
+  (org-display-inline-images) ;; Can also use org-startup-with-inline-images
+
+  ;; Scale the text.  The next line is for basic scaling:
+  (setq text-scale-mode-amount 2)
+  (text-scale-mode 1))
+
+  ;; This option is more advanced, allows you to scale other faces too
+  ;; (setq-local face-remapping-alist '((default (:height 2.0) variable-pitch)
+  ;;                                    (org-verbatim (:height 1.75) org-verbatim)
+  ;;                                    (org-block (:height 1.25) org-block))))
+
+(defun efs/presentation-end ()
+  ;; Show the mode line again
+  (hide-mode-line-mode 0)
+
+  ;; Turn off text scale mode (or use the next line if you didn't use text-scale-mode)
+  (text-scale-mode 0))
+
+  ;; If you use face-remapping-alist, this clears the scaling:
+ ; (setq-local face-remapping-alist '((default variable-pitch default))))
+
+(use-package org-tree-slide
+  :hook ((org-tree-slide-play . efs/presentation-setup)
+                (org-tree-slide-stop . efs/presentation-end))
+  :custom
+  (org-tree-slide-slide-in-effect t)
+  (org-tree-slide-activate-message "Presentation started!")
+  (org-tree-slide-deactivate-message "Presentation finished!")
+  (org-tree-slide-header t)
+  (org-tree-slide-breadcrumbs " > ")
+  (org-image-actual-width nil)
+  (org-tree-slide-skip-outline-level 4))
+
+(use-package org-roam
+  :ensure t
+  :init
+  (setq org-roam-v2-ack t)
+  :custom
+  (org-roam-directory "~/notes")
+  :config
+  (org-roam-setup))
+
+(map! :leader
+      (:prefix-map ("r" . "Org-Roam commands")
+       :desc "Toggle org-roam buffer"
+       "t" #'org-roam-buffer-toggle
+       :desc "Find or Create Node"
+       "f" #'org-roam-node-find
+       :desc "Insert Node"
+       "i" #'org-roam-node-insert
+       :desc "Create id for heading node"
+       "c" #'org-id-get-create
+       :desc "Add alias for node"
+       "a" #'org-roam-alias-add
+       )
+      )
+
+(use-package writeroom-mode
+  :config
+  (setq writeroom-fullscreen-effect nil
+        writeroom-mode-line t
+        writeroom-width 80)
+    )
+
+;(use-package writeroom-mode
+;  :ensure t
+;  :init (add-hook 'org-mode-hook 'writeroom-mode)
+;  :after org)
+
+(map! :leader
+      :desc "Toggle narrow subtree"
+      "t n" #'org-toggle-narrow-to-subtree)
+
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
 (define-key evil-normal-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
@@ -344,23 +426,11 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 
 (after! avy
   ;; home row priorities: 8 6 4 5 - - 1 2 3 7
-  (setq avy-keys '(?t ?e ?i ?s ?n ?r ?o ?a)))
-
-(use-package writeroom-mode
-  :config
-  (setq writeroom-fullscreen-effect nil
-        writeroom-mode-line t
-        writeroom-width 80)
-    )
+  (setq avy-keys '(?t ?e ?i ?s ?r ?o ?a ?n)))
 
 (map! :leader
       :desc "Writeroom-mode"
       "W" #'writeroom-mode)
-
-;(use-package writeroom-mode
-;  :ensure t
-;  :init (add-hook 'org-mode-hook 'writeroom-mode)
-;  :after org)
 
 (defun open-task-file ()
   "Open tasks.org file."
