@@ -1,9 +1,10 @@
 (setq user-full-name "David Rambo"
       user-mail-address "davrambo@gmail.com")
 
-(setq doom-font (font-spec :family "SauceCodePro Nerd Font" :height 140)
-      doom-variable-pitch-font (font-spec :family "Source Sans Pro" :height 160 :weight 'regular)
-      doom-serif-font (font-spec :family "DejaVu Serif" :height 160))
+(setq doom-font (font-spec :family "SauceCodePro Nerd Font" :size 14.0)
+      doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 16.0 :weight 'regular)
+      doom-serif-font (font-spec :family "DejaVu Serif" :size 16.0)
+      doom-big-font (font-spec :size 28.0))
 
 (setq doom-theme 'doom-gruvbox-light)
 (after! doom-themes
@@ -105,7 +106,9 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 (after! mixed-pitch
 
       (setq mixed-pitch-set-height t)
+      (setq variable-pitch (font-spec :family "SauceCodePro Nerd Font"))
       (set-face-attribute 'variable-pitch nil :height 160)
+
   (defun mixed-pitch-sans-mode (&optional arg)
     "Change the default face of the current buffer to a sans-serif variable pitch."
     (interactive)
@@ -118,7 +121,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
     :group 'basic-faces)
 
   (setq mixed-pitch-set-height t)
-  (setq variable-pitch-serif-font (font-spec :family "Palatino Linotype" :size 18))
+  (setq variable-pitch-serif-font (font-spec :family "Palatino Linotype" :size 18.0))
   (set-face-attribute 'variable-pitch-serif nil :font variable-pitch-serif-font)
 
   (defun mixed-pitch-serif-mode (&optional arg)
@@ -444,12 +447,6 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
   (find-file-existing "~/notes/hours-log.org"))
 (global-set-key (kbd "C-c h") 'open-hours-log)
 
-;(defun open-journal-entry ()
-;  "Open today's journal entry."
-;  (interactive)
-;  (find-file-existing "~/notes/journal/%Y-%m-%d.org"))
-;(global-set-key (kbd "C-c j") 'open-journal-entry)
-
 (map! :leader
-      :desc "Toggle flyspell"
-      "t s" #'flyspell-mode)
+      :desc "Toggle org-sidebar-tree"
+      "t s" #'org-sidebar-tree-toggle)
