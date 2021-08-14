@@ -365,6 +365,11 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
   (setq org-roam-v2-ack t)
   :custom
   (org-roam-directory "~/notes")
+  (org-roam-capture-templates
+   '(("d" "default" plain
+      "#+filetags: %?"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)))
   :config
   (org-roam-setup))
 
