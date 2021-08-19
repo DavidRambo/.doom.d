@@ -284,7 +284,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 )
 
 (setq org-super-agenda-groups
-      '((:name "Today"
+      '((:name "Due"
          :time-grid t
          :scheduled today
          :deadline today
@@ -399,6 +399,8 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 ;  :ensure t
 ;  :init (add-hook 'org-mode-hook 'writeroom-mode)
 ;  :after org)
+
+(setq org-clock-sound "~/.doom.d/pomo_bell.wav")
 
 (map! :leader
       :desc "Toggle narrow subtree"

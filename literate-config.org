@@ -37,6 +37,7 @@
   - [[#presentations][Presentations]]
   - [[#org-roam][Org Roam]]
   - [[#writeroom][Writeroom]]
+  - [[#pomodoro-timer][Pomodoro Timer]]
 - [[#mappings][Mappings]]
   - [[#narrowwiden-subtree][Narrow/Widen subtree]]
   - [[#esc-as-quit-key-c-g][ESC as quit key (C-g)]]
@@ -567,7 +568,7 @@ Basic configuration.
 
 #+begin_src elisp
 (setq org-super-agenda-groups
-      '((:name "Today"
+      '((:name "Due"
          :time-grid t
          :scheduled today
          :deadline today
@@ -683,6 +684,14 @@ Presentation mode for org-mode.
       )
 #+end_src
 
+If I were to perform the keybind mappings with use-package, I think it would look like:
+
+:bind (:prefix-map ("SPC r" . "Org-Roam ")
+                ("t" . org-roam-buffer-toggle)
+                etc.)
+
+I don't know how to integrate descriptions.
+
 ** Writeroom
 *** Config
 #+begin_src elisp
@@ -695,12 +704,17 @@ Presentation mode for org-mode.
 #+end_src
 
 *** Make writeroom default for org-mode files
-
 #+begin_src elisp
 ;(use-package writeroom-mode
 ;  :ensure t
 ;  :init (add-hook 'org-mode-hook 'writeroom-mode)
 ;  :after org)
+#+end_src
+
+** Pomodoro Timer
+
+#+begin_src elisp
+(setq org-clock-sound "~/.doom.d/pomo_bell.wav")
 #+end_src
 
 * Mappings
