@@ -438,9 +438,16 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
   ;; home row priorities: 8 6 4 5 - - 1 2 3 7
   (setq avy-keys '(?t ?e ?i ?s ?r ?o ?a ?n)))
 
+(defun center-visual-fill ()
+  (setq visual-fill-column-center-text t)
+  (visual-fill-column-mode 1))
+
+(add-hook 'visual-line-mode-hook #'center-visual-fill)
+
 (map! :leader
-      :desc "Writeroom-mode"
-      "W" #'writeroom-mode)
+      :desc "visual-fill-column-mode"
+;      "W" #'writeroom-mode)
+      "W" #'visual-fill-column-mode)
 
 (defun open-task-file ()
   "Open tasks.org file."

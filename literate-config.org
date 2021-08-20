@@ -46,7 +46,7 @@
   - [[#buffer-movement][Buffer Movement]]
   - [[#window-movement][Window Movement]]
   - [[#avy-for-colemak][Avy for colemak]]
-  - [[#writeroom-1][Writeroom]]
+  - [[#writeroomvisual-fill-column][Writeroom/visual-fill-column]]
   - [[#open-tasksorg-file][Open tasks.org file]]
   - [[#open-hours-log][Open hours log]]
   - [[#org-sidebar][Org-Sidebar]]
@@ -800,13 +800,30 @@ From tecosaur's config, this sets the priority to colemak's homerow:
   (setq avy-keys '(?t ?e ?i ?s ?r ?o ?a ?n)))
 #+end_src
 
-** Writeroom
+** Writeroom/visual-fill-column
+Currently trying to implement the same effect with just the ~visual-fill-column~ package, which is what Writeroom uses (same author).
+My trouble with Writeroom is how it removes all other windows in the frame.
+I often want to use Writeroom simply to set ~visual-fill-column~ to ~80~ (but with variable-pitch it works out to about 100 actual characters) and to set ~visual-fill-column-center-text~ to ~t~ without closing other windows.
+So when I use Writeroom, I need to then undo the window change use ~winner-undo~ (C-w C-u).
+I also need to set the variable for centering text with this minor mode to true.
+
+I've take a line from the package's github repo so that every file for which visual-line-mode is enabled (that's the hook), it will enable visual-fill-column-mode.
 
 #+begin_src elisp
+(defun center-visual-fill ()
+  (setq visual-fill-column-center-text t)
+  (visual-fill-column-mode 1))
+
+(add-hook 'visual-line-mode-hook #'center-visual-fill)
+
 (map! :leader
-      :desc "Writeroom-mode"
-      "W" #'writeroom-mode)
+      :desc "visual-fill-column-mode"
+;      "W" #'writeroom-mode)
+      "W" #'visual-fill-column-mode)
 #+end_src
+
+#+RESULTS:
+: visual-fill-column-mode
 
 ** Open tasks.org file
 Function to open tasks.org and then map key to open.
