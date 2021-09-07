@@ -3,7 +3,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(fill-column 85))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -23,7 +23,7 @@
  '(org-level-7 ((t (:inherit outline-7 :extend t :weight normal))))
  '(org-level-8 ((t (:inherit outline-8 :extend t :weight normal))))
  '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
- '(org-property-value ((t (:inherit (fixed-pitch) :weight regular))) t)
- '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
- '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular))))
+ '(org-property-value ((t (:inherit (fixed-pitch) :weight regular :height 1.0))) t)
+ '(org-special-keyword ((t (:inherit (fixed-pitch) :weight regular :height 1.0))))
+ '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 1.0))))
  '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))

@@ -82,6 +82,10 @@
       "h" 'dired-single-up-directory
       "l" 'dired-single-buffer))
 
+;(use-package git-gutter
+;  :config
+;  (setq git-gutter-mode nil))
+
 ;(use-package! mixed-pitch
 ;  :hook (org-mode . mixed-pitch-mode)
 ;  :config
@@ -135,7 +139,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 
 (after! org
  (add-hook 'org-mode-hook 'org-indent-mode)
- (setq
+ (setq org-ellipsis " ▾ "
        ;org-agenda-files (file-expand-wildcards "~/notes/*.org")
        org-agenda-files '("~/notes/tasks.org")
        org-hide-emphasis-markers t
@@ -158,7 +162,6 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
  )
 
  (require 'org-inlinetask) ; C-c C-x t
-
 ) ; end after! org
 
 (after! org
@@ -248,6 +251,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
         org-journal-date-prefix "#+TITLE: "
         org-journal-time-prefix "* "
         org-journal-date-format "%B %d, %Y (%A) "
+        org-journal-time-format "%I:%M %p\n"
         org-journal-file-format "%Y-%m-%d.org")
 
   (setq org-journal-enable-agenda-integration nil)
@@ -437,6 +441,8 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 (after! avy
   ;; home row priorities: 8 6 4 5 - - 1 2 3 7
   (setq avy-keys '(?t ?e ?i ?s ?r ?o ?a ?n)))
+
+(setq fill-column 85)
 
 (defun center-visual-fill ()
   (setq visual-fill-column-center-text t)

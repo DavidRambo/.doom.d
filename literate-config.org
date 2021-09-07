@@ -19,6 +19,7 @@
   - [[#modeline][Modeline]]
   - [[#ivy][Ivy]]
   - [[#dired][Dired]]
+  - [[#git-gutter][Git Gutter]]
 - [[#org-settings][Org Settings]]
   - [[#mixed-pitch-for-org][Mixed-Pitch for Org]]
   - [[#set-org-directory][Set org directory]]
@@ -250,6 +251,17 @@ Make doom-modeline smaller.
       "l" 'dired-single-buffer))
 #+end_src
 
+** Git Gutter
+Git gutter messes with visual-line-mode movement, so I disable it.
+
+#+begin_src elisp
+;(use-package git-gutter
+;  :config
+;  (setq git-gutter-mode nil))
+#+end_src
+
+The above and variations of it did not work, so I removed the package in ~init.el~.
+
 * Org Settings
 ** Mixed-Pitch for Org
 
@@ -323,12 +335,12 @@ This section establishes:
 Including my entire org notes directory in the agenda was too slow (at least the first time I loaded it up).
 So I went back to only "tasks.org" and I will add to it with "C-c [".
 I may add my journal subdirectory in the future:
-org-agenda-files '("~/notes/tasks.org" (files-expand-wildcards "~/notes/journal*.org"))
+~org-agenda-files '("~/notes/tasks.org" (files-expand-wildcards "~/notes/journal/*.org"))~
 
 #+begin_src elisp
 (after! org
  (add-hook 'org-mode-hook 'org-indent-mode)
- (setq
+ (setq org-ellipsis " ▾ "
        ;org-agenda-files (file-expand-wildcards "~/notes/*.org")
        org-agenda-files '("~/notes/tasks.org")
        org-hide-emphasis-markers t
@@ -351,9 +363,11 @@ org-agenda-files '("~/notes/tasks.org" (files-expand-wildcards "~/notes/journal*
  )
 
  (require 'org-inlinetask) ; C-c C-x t
-
 ) ; end after! org
 #+end_src
+
+#+RESULTS:
+: org-inlinetask
 
 Removed from line-number-current-line ~:foreground "orange"~
 
@@ -516,6 +530,7 @@ For when my checkboxes are in lists and not (TODO) headlines, which means org-su
         org-journal-date-prefix "#+TITLE: "
         org-journal-time-prefix "* "
         org-journal-date-format "%B %d, %Y (%A) "
+        org-journal-time-format "%I:%M %p\n"
         org-journal-file-format "%Y-%m-%d.org")
 
   (setq org-journal-enable-agenda-integration nil)
@@ -749,6 +764,7 @@ In evil-mode, the arrows move in this way in insert mode.
 It's still a little wonky, presumably because of the variable-face font I'm using.
 (Actually, it still skips around horizontally when moving vertically even with a monoface font.)
 Scrolling up and down does not always remain in the correct column.
+*Update*: I think it has to do with magit because when I stage changes, it goes away.
 
 Update: after removing a bunch of my custom face settings and installing the mixed-pitch package, it seems to work fine.
 
@@ -803,13 +819,15 @@ From tecosaur's config, this sets the priority to colemak's homerow:
 ** Writeroom/visual-fill-column
 Currently trying to implement the same effect with just the ~visual-fill-column~ package, which is what Writeroom uses (same author).
 My trouble with Writeroom is how it removes all other windows in the frame.
-I often want to use Writeroom simply to set ~visual-fill-column~ to ~80~ (but with variable-pitch it works out to about 100 actual characters) and to set ~visual-fill-column-center-text~ to ~t~ without closing other windows.
+I often want to use Writeroom simply to set ~fill-column~ to ~80~ (but with variable-pitch it works out to about 100 actual characters) and to set ~visual-fill-column-center-text~ to ~t~ without closing other windows.
 So when I use Writeroom, I need to then undo the window change use ~winner-undo~ (C-w C-u).
 I also need to set the variable for centering text with this minor mode to true.
 
 I've take a line from the package's github repo so that every file for which visual-line-mode is enabled (that's the hook), it will enable visual-fill-column-mode.
 
 #+begin_src elisp
+(setq fill-column 85)
+
 (defun center-visual-fill ()
   (setq visual-fill-column-center-text t)
   (visual-fill-column-mode 1))
@@ -821,9 +839,6 @@ I've take a line from the package's github repo so that every file for which vis
 ;      "W" #'writeroom-mode)
       "W" #'visual-fill-column-mode)
 #+end_src
-
-#+RESULTS:
-: visual-fill-column-mode
 
 ** Open tasks.org file
 Function to open tasks.org and then map key to open.
