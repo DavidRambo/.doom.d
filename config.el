@@ -159,6 +159,8 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
   '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 1.0))))
   '(org-property-value ((t (:inherit (fixed-pitch) :weight regular :height 1.0))))
   '(org-special-keyword ((t (:inherit (fixed-pitch) :weight regular :height 1.0))))
+;  '(org-super-agenda-header ((t (:foreground "#076678"))))
+  '(org-agenda-structure ((t (:foreground "#076678"))))
  )
 
  (require 'org-inlinetask) ; C-c C-x t
@@ -257,23 +259,51 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
   (setq org-journal-enable-agenda-integration nil)
 )
 
-    (setq org-agenda-custom-commands
-      '(("n" "Agenda and all TODOs"
-         ((agenda "")
-         (alltodo "")))
-        ("h" "Home-related tasks" tags "home"
-           ((org-agenda-files '("~/notes/tasks.org"))) ; For when I expand agenda files and want this to be quick.
-           )
-        ("w" "Work-related tasks" tags "postdoc|book")
-        ("b" "Book-related tasks" tags "book")
-        ("r" "Reading tasks" tags "reading"))
-)
+(setq org-agenda-custom-commands
+  '(
+    ("n" "In-Progress and Next Tasks"
+     (
+     (todo "IN-PROGRESS|READING"
+       ((org-agenda-overriding-header "In-Progress Tasks")))
+     (todo "NEXT"
+       ((org-agenda-overriding-header "Next Tasks")))
+     (agenda "" ((org-deadline-warning-days 8)))
+     ))
+
+    ("h" "Home-related tasks"
+       (tags-todo "+home"
+        ((org-agenda-overriding-header "Home Tasks")))
+        ((org-agenda-files '("~/notes/tasks.org")))
+        ; For when I expand agenda files and want this to be quick.
+       )
+
+    ("w" "Work-related tasks"
+     (
+      (tags-todo "+postdoc-jobs"
+     ((org-agenda-overriding-header "Postdoc Tasks")))
+      (tags-todo "book"
+     ((org-agenda-overriding-header "Book Tasks")))
+      (tags-todo "jobs"
+     ((org-agenda-overriding-header "Job Application Tasks")))
+     ))
+
+    ("b" "Book-related tasks" tags-todo "book")
+
+    ("r" "Reading Tasks"
+     ((todo " READING"
+            ((org-agenda-overriding-header "Currently Reading")))
+      (todo " READ"
+            ((org-agenda-overriding-header "To Read")))
+      ))
+))
 
 (use-package! org-super-agenda
   :after org-agenda
   :init
   (setq
         org-log-done nil
+        org-agenda-start-day nil
+        org-agenda-span 7
         org-agenda-skip-scheduled-if-done t
         org-agenda-skip-deadline-if-done t
         org-agenda-include-deadlines t
@@ -281,47 +311,48 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
         org-agenda-tags-column 100
         org-agenda-compact-blocks nil
         org-agenda-dim-blocked-tasks nil
-        org-agenda-start-on-weekday 0
+        org-agenda-start-on-weekday nil
+        org-super-agenda-groups nil
         )
   :config
   (org-super-agenda-mode)
 )
 
-(setq org-super-agenda-groups
-      '((:name "Due"
-         :time-grid t
-         :scheduled today
-         :deadline today
-         :face (:foreground "#DC322F")
-         :order 1)
-        (:name "In Progress"
-         :todo ("IN-PROGRESS(p)")
-         :face (:foreground "#2AA198")
-         :order 2)
-        (:name "Next"
-         :todo ("NEXT(n)")
-         :face (:foreground "#6C71C4")
-         :order 3)
-        (:name "To Do"
-         :todo ("TODO(t)")
-         :face (:foreground "#DC322F")
-         :order 4)
-        (:order-multi (5 (:name "Work"
-                          :and (:tag "postdoc"))
-                         (:name "Writing"
-                          :and (:tag "book" :tag "writing"))
-                         (:name "Reading"
-                          :and (:tag "reading"))
-                         (:name "Home"
-                          :and (:tag "home"))
-                      )
-        )
-;         (:name "Remaining Tasks"
-;                :and (:todo "TODO"
-;                      :not (:todo "postdoc" :todo "IN-PROGRESS" :todo "NEXT" :todo "reading" :todo "writing")))
-         (:todo "WAITING" :order 8)
-       )
-)
+;(setq org-super-agenda-groups
+;      '((:name "Today"
+;         :time-grid t
+;         :scheduled today
+;         :deadline today
+;         :face (:foreground "#DC322F")
+;         :order 1)
+;        (:name "In Progress"
+;         :todo ("IN-PROGRESS(p)")
+;         :face (:foreground "#2AA198")
+;         :order 2)
+;        (:name "Next"
+;         :todo ("NEXT(n)")
+;         :face (:foreground "#6C71C4")
+;         :order 3)
+;        (:name "To Do"
+;         :todo ("TODO(t)")
+;         :face (:foreground "#DC322F")
+;         :order 4)
+;        (:order-multi (5 (:name "Work"
+;                          :and (:tag "postdoc" :tag "book"))
+;                         (:name "Writing"
+;                          :and (:tag "book" :tag "writing"))
+;                         (:name "Reading"
+;                          :and (:tag "reading"))
+;                         (:name "Home"
+;                          :and (:tag "home"))
+;                      )
+;        )
+;;         (:name "Remaining Tasks"
+;;                :and (:todo "TODO"
+;;                      :not (:todo "postdoc" :todo "IN-PROGRESS" :todo "NEXT" :todo "reading" :todo "writing")))
+;         (:todo "WAITING" :order 8)
+;       )
+;)
 
 (use-package hide-mode-line)
 
