@@ -10,7 +10,7 @@
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t
-        doom-gruvbox-light-variant "medium"))
+        doom-gruvbox-light-variant "soft"))
 
 (setq fring-mode 'default)
 
@@ -436,6 +436,22 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 ;  :after org)
 
 (setq org-clock-sound "~/.doom.d/pomo_bell.wav")
+
+(after! org
+  (setq org-export-with-toc nil))
+
+(with-eval-after-load 'ox-latex
+  (add-to-list 'org-latex-classes
+              '("org-plain-latex"
+                "\\documentclass{article}
+                [NO-DEFAULT-PACKAGES]
+                [PACKAGES]
+                [EXTRA]"
+                        ("\\section{%s}" . "\\section*{%s}")
+                        ("\\subsection{%s}" . "\\subsection*{%s}")
+                        ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                        ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                        ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 
 (map! :leader
       :desc "Toggle narrow subtree"

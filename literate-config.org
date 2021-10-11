@@ -39,6 +39,8 @@
   - [[#org-roam][Org Roam]]
   - [[#writeroom][Writeroom]]
   - [[#pomodoro-timer][Pomodoro Timer]]
+  - [[#org-export][Org Export]]
+  - [[#latex-setup][LaTeX Setup]]
 - [[#mappings][Mappings]]
   - [[#narrowwiden-subtree][Narrow/Widen subtree]]
   - [[#esc-as-quit-key-c-g][ESC as quit key (C-g)]]
@@ -121,7 +123,7 @@ There are two ways to load a theme. Both assume the theme is installed and
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t
-        doom-gruvbox-light-variant "medium"))
+        doom-gruvbox-light-variant "soft"))
 #+end_src
 
 * Basic Settings
@@ -758,6 +760,30 @@ I don't know how to integrate descriptions.
 
 #+begin_src elisp
 (setq org-clock-sound "~/.doom.d/pomo_bell.wav")
+#+end_src
+
+** Org Export
+
+#+begin_src elisp
+(after! org
+  (setq org-export-with-toc nil))
+#+end_src
+
+** LaTeX Setup
+
+#+begin_src elisp
+(with-eval-after-load 'ox-latex
+  (add-to-list 'org-latex-classes
+              '("org-plain-latex"
+                "\\documentclass{article}
+                [NO-DEFAULT-PACKAGES]
+                [PACKAGES]
+                [EXTRA]"
+                        ("\\section{%s}" . "\\section*{%s}")
+                        ("\\subsection{%s}" . "\\subsection*{%s}")
+                        ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                        ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                        ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 #+end_src
 
 * Mappings
