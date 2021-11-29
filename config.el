@@ -6,11 +6,12 @@
       doom-serif-font (font-spec :family "DejaVu Serif" :size 16.0)
       doom-big-font (font-spec :size 28.0))
 
-(setq doom-theme 'doom-gruvbox-light)
+(setq doom-theme 'doom-gruvbox)
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t
-        doom-gruvbox-light-variant "soft"))
+        doom-gruvbox-light-variant "soft"
+        doom-gruvbox-dark-variant "soft"))
 
 (setq fring-mode 'default)
 

@@ -119,11 +119,12 @@ There are two ways to load a theme. Both assume the theme is installed and
 (setq doom-theme 'doom-one)
 
 #+begin_src elisp
-(setq doom-theme 'doom-gruvbox-light)
+(setq doom-theme 'doom-gruvbox)
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t
-        doom-gruvbox-light-variant "soft"))
+        doom-gruvbox-light-variant "soft"
+        doom-gruvbox-dark-variant "soft"))
 #+end_src
 
 * Basic Settings
