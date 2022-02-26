@@ -145,8 +145,9 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
        org-agenda-files '("~/notes/tasks.org")
        org-hide-emphasis-markers t
        org-startup-folded 'content
-;       line-spacing 0.3
+       ;line-spacing 0.3
        org-bullets-face-name doom-font
+       display-line-numbers-type nil
        )
 
  (custom-set-faces
@@ -176,7 +177,9 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
         org-fontify-todo-headline t)
   )
 
-(setq display-line-numbers-type nil)
+;(after! org
+;  (setq display-line-numbers '(not org-mode)))
+;(setq display-line-numbers-type nil)
 
 ; Disable line numbers for certain modes
 ;(dolist (mode '(org-mode-hook
@@ -453,6 +456,16 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
                         ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
                         ("\\paragraph{%s}" . "\\paragraph*{%s}")
                         ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
+(use-package python
+  :ensure t
+  :custom
+    (python-shell-interpreter "python3")
+    )
+
+;(add-hook  'python-mode-hook
+;           (lambda () (setq-local display-line-numbers-type t)))
+;(add-hook 'python-mode-hook 'display-line-numbers-mode t)
 
 (map! :leader
       :desc "Toggle narrow subtree"

@@ -41,6 +41,9 @@
   - [[#pomodoro-timer][Pomodoro Timer]]
   - [[#org-export][Org Export]]
   - [[#latex-setup][LaTeX Setup]]
+- [[#python-ide][Python IDE]]
+  - [[#turn-on-python-mode][Turn on python-mode]]
+  - [[#line-numbers-in-python][line numbers in Python]]
 - [[#mappings][Mappings]]
   - [[#narrowwiden-subtree][Narrow/Widen subtree]]
   - [[#esc-as-quit-key-c-g][ESC as quit key (C-g)]]
@@ -348,8 +351,9 @@ I may add my journal subdirectory in the future:
        org-agenda-files '("~/notes/tasks.org")
        org-hide-emphasis-markers t
        org-startup-folded 'content
-;       line-spacing 0.3
+       ;line-spacing 0.3
        org-bullets-face-name doom-font
+       display-line-numbers-type nil
        )
 
  (custom-set-faces
@@ -397,7 +401,9 @@ Change entire headline when set to "DONE" todo status
 #+end_src
 
 ** Line numbers
-Update: Wow, it seems that going back to doom-font configuration and implementing the mixed-pitch package has fixed the uneven left-hand column.
+Update (2/26/2022): I set the line numbers type to nil in my "after org" settings block above.
+
+It seems that going back to doom-font configuration and implementing the mixed-pitch package has fixed the uneven left-hand column.
 
  I had disabled display-line-numbers in favor of linum-mode because
  linum-mode works better with non-monospace fonts:
@@ -407,7 +413,9 @@ Update: Wow, it seems that going back to doom-font configuration and implementin
  However, that is being deprecated and apparently slows emacs way down when reaching a thousand lines.
 
 #+begin_src elisp
-(setq display-line-numbers-type nil)
+;(after! org
+;  (setq display-line-numbers '(not org-mode)))
+;(setq display-line-numbers-type nil)
 
 ; Disable line numbers for certain modes
 ;(dolist (mode '(org-mode-hook
@@ -785,6 +793,24 @@ I don't know how to integrate descriptions.
                         ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
                         ("\\paragraph{%s}" . "\\paragraph*{%s}")
                         ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+#+end_src
+
+* Python IDE
+** Turn on python-mode
+
+#+begin_src elisp
+(use-package python
+  :ensure t
+  :custom
+    (python-shell-interpreter "python3")
+    )
+#+end_src
+
+** line numbers in Python
+#+begin_src elisp
+;(add-hook  'python-mode-hook
+;           (lambda () (setq-local display-line-numbers-type t)))
+;(add-hook 'python-mode-hook 'display-line-numbers-mode t)
 #+end_src
 
 * Mappings
