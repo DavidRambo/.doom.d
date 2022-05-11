@@ -58,7 +58,7 @@
    :files ("*.el*")))
 
 (package! visual-fill-column)
-(package! writeroom-mode)
+;(package! writeroom-mode)
 (package! org-super-agenda)
 (package! mixed-pitch)
 (package! eterm-256color)
@@ -66,3 +66,5 @@
 (package! org-tree-slide)
 (package! org-roam)
 (package! org-sidebar)
+(package! centered-cursor-mode)
+(package! good-scroll)

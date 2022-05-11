@@ -20,6 +20,9 @@
   - [[#ivy][Ivy]]
   - [[#dired][Dired]]
   - [[#git-gutter][Git Gutter]]
+  - [[#center-cursor-scrolling][Center cursor scrolling]]
+  - [[#projectile][Projectile]]
+  - [[#smooth-scrolling][Smooth Scrolling]]
 - [[#org-settings][Org Settings]]
   - [[#mixed-pitch-for-org][Mixed-Pitch for Org]]
   - [[#set-org-directory][Set org directory]]
@@ -122,7 +125,7 @@ There are two ways to load a theme. Both assume the theme is installed and
 (setq doom-theme 'doom-one)
 
 #+begin_src elisp
-(setq doom-theme 'doom-gruvbox)
+(setq doom-theme 'doom-gruvbox-light)
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t
@@ -267,7 +270,56 @@ Git gutter messes with visual-line-mode movement, so I disable it.
 #+end_src
 
 The above and variations of it did not work, so I removed the package in ~init.el~.
+** Center cursor scrolling
+#+begin_src elisp
+(use-package centered-cursor-mode
+  :init
+  (setq ccm-recenter-at-end-of-file t)
+  )
+#+end_src
 
+(defun turn-centered-cursor-mode-on ()
+  "Turn centered-cursor-mode on."
+  (centered-cursor-mode +1)
+)
+
+(add-hook 'text-mode-hook 'turn-centered-cursor-mode-on)
+(add-hook 'markdown-mode-hook 'turn-centered-cursor-mode-on)
+(add-hook 'org-mode-hook 'turn-centered-cursor-mode-on)
+
+#+begin_src elisp
+(map! :desc "centered cursor mode"
+      "C-c c" #'centered-cursor-mode)
+#+end_src
+
+** Projectile
+I use git to track certain config files from my $HOME directory.
+This messes with projectile (according to ~doom doctor~), so I tell projectile to ignore it.
+#+begin_src elisp
+(after! projectile
+  (setq projectile-project-root-files-bottom-up
+        (remove ".git" projectile-project-root-files-bottom-up)))
+#+end_src
+
+** Smooth Scrolling
+It would be great if I could integrate this with evil-mode's bindings.
+Perhaps I will need to wait for emacs 29's pixel-scroll-precision-mode (and also for doom emacs to support that version of emacs).
+#+begin_src elisp
+(use-package good-scroll
+  :init
+  (global-set-key [next] #'good-scroll-up-full-screen)
+  (global-set-key [prior] #'good-scroll-down-full-screen)
+  (setq good-scroll-mode t))
+#+end_src
+
+(use-package sublimity)
+
+(use-package sublimity-scroll
+  :init
+  (setq sublimity-scroll-weight 10
+        sublimity-scroll-drift-length 5))
+
+(use-package sublimity-map)
 * Org Settings
 ** Mixed-Pitch for Org
 
@@ -748,22 +800,18 @@ I don't know how to integrate descriptions.
 
 ** Writeroom
 *** Config
-#+begin_src elisp
 (use-package writeroom-mode
   :config
   (setq writeroom-fullscreen-effect nil
         writeroom-mode-line t
         writeroom-width 80)
     )
-#+end_src
 
 *** Make writeroom default for org-mode files
-#+begin_src elisp
-;(use-package writeroom-mode
-;  :ensure t
-;  :init (add-hook 'org-mode-hook 'writeroom-mode)
-;  :after org)
-#+end_src
+(use-package writeroom-mode
+  :ensure t
+  :init (add-hook 'org-mode-hook 'writeroom-mode)
+  :after org)
 
 ** Pomodoro Timer
 

@@ -6,7 +6,7 @@
       doom-serif-font (font-spec :family "DejaVu Serif" :size 16.0)
       doom-big-font (font-spec :size 28.0))
 
-(setq doom-theme 'doom-gruvbox)
+(setq doom-theme 'doom-gruvbox-light)
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t
@@ -86,6 +86,24 @@
 ;(use-package git-gutter
 ;  :config
 ;  (setq git-gutter-mode nil))
+
+(use-package centered-cursor-mode
+  :init
+  (setq ccm-recenter-at-end-of-file t)
+  )
+
+(map! :desc "centered cursor mode"
+      "C-c c" #'centered-cursor-mode)
+
+(after! projectile
+  (setq projectile-project-root-files-bottom-up
+        (remove ".git" projectile-project-root-files-bottom-up)))
+
+(use-package good-scroll
+  :init
+  (global-set-key [next] #'good-scroll-up-full-screen)
+  (global-set-key [prior] #'good-scroll-down-full-screen)
+  (setq good-scroll-mode t))
 
 ;(use-package! mixed-pitch
 ;  :hook (org-mode . mixed-pitch-mode)
@@ -426,18 +444,6 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
        "a" #'org-roam-alias-add
        )
       )
-
-(use-package writeroom-mode
-  :config
-  (setq writeroom-fullscreen-effect nil
-        writeroom-mode-line t
-        writeroom-width 80)
-    )
-
-;(use-package writeroom-mode
-;  :ensure t
-;  :init (add-hook 'org-mode-hook 'writeroom-mode)
-;  :after org)
 
 (setq org-clock-sound "~/.doom.d/pomo_bell.wav")
 
