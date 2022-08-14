@@ -475,6 +475,10 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
       "#+filetags: %?"
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
       :unnarrowed t)))
+
+  (org-roam-node-display-template
+          (concat "${title:*} "
+                  (propertize "${tags:10}" 'face 'org-tag)))
   :config
   (org-roam-setup))
 
@@ -510,6 +514,8 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
                         ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
                         ("\\paragraph{%s}" . "\\paragraph*{%s}")
                         ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
+(setq todoist-token "9267d354b1afa603871992b5974a692bb33c47ac")
 
 (use-package python
   :ensure t
@@ -584,6 +590,10 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
   (find-file-existing "~/notes/hours-log.org"))
 (global-set-key (kbd "C-c h") 'open-hours-log)
 
+;(map! :leader
+;      :desc "Toggle org-sidebar-tree"
+;      "t s" #'org-sidebar-tree-toggle)
+
 (map! :leader
-      :desc "Toggle org-sidebar-tree"
-      "t s" #'org-sidebar-tree-toggle)
+      :desc "Toggle todoist buffer"
+      "t t" #'todoist)

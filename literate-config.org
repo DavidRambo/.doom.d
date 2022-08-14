@@ -46,6 +46,7 @@
   - [[#pomodoro-timer][Pomodoro Timer]]
   - [[#org-export][Org Export]]
   - [[#latex-setup][LaTeX Setup]]
+  - [[#todoist][todoist]]
 - [[#python-ide][Python IDE]]
   - [[#turn-on-python-mode][Turn on python-mode]]
   - [[#line-numbers-in-python][line numbers in Python]]
@@ -62,6 +63,7 @@
   - [[#open-tasksorg-file][Open tasks.org file]]
   - [[#open-hours-log][Open hours log]]
   - [[#org-sidebar][Org-Sidebar]]
+  - [[#todoist-1][todoist]]
 
 * Preamble
 
@@ -826,6 +828,10 @@ Presentation mode for org-mode.
       "#+filetags: %?"
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
       :unnarrowed t)))
+
+  (org-roam-node-display-template
+          (concat "${title:*} "
+                  (propertize "${tags:10}" 'face 'org-tag)))
   :config
   (org-roam-setup))
 #+end_src
@@ -898,6 +904,11 @@ I don't know how to integrate descriptions.
                         ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
                         ("\\paragraph{%s}" . "\\paragraph*{%s}")
                         ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+#+end_src
+
+** todoist
+#+begin_src elisp
+(setq todoist-token "9267d354b1afa603871992b5974a692bb33c47ac")
 #+end_src
 
 * Python IDE
@@ -1053,9 +1064,18 @@ Function to open hours-log.org and then map key to open.
 #+end_src
 
 ** Org-Sidebar
+This no longer works.
+
+#+begin_src elisp
+;(map! :leader
+;      :desc "Toggle org-sidebar-tree"
+;      "t s" #'org-sidebar-tree-toggle)
+#+end_src
+
+** todoist
 
 #+begin_src elisp
 (map! :leader
-      :desc "Toggle org-sidebar-tree"
-      "t s" #'org-sidebar-tree-toggle)
+      :desc "Toggle todoist buffer"
+      "t t" #'todoist)
 #+end_src
