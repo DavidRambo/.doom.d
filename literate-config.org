@@ -5,6 +5,8 @@
 
 * Table of Contents :TOC:
 - [[#preamble][Preamble]]
+  - [[#user-config][User Config]]
+  - [[#both][Both]]
 - [[#fonts][Fonts]]
 - [[#theme][Theme]]
 - [[#basic-settings][Basic Settings]]
@@ -52,6 +54,7 @@
   - [[#esc-as-quit-key-c-g][ESC as quit key (C-g)]]
   - [[#normal-mode-navigation][Normal Mode Navigation]]
   - [[#s-as-substitute]["S" as substitute]]
+  - [[#open-folds-in-evil-normal-state][Open fold(s) in evil-normal-state]]
   - [[#buffer-movement][Buffer Movement]]
   - [[#window-movement][Window Movement]]
   - [[#avy-for-colemak][Avy for colemak]]
@@ -86,12 +89,14 @@
 
  Some functionality uses this to identify you, e.g. GPG configuration, email
  clients, file templates and snippets.
-
+** User Config
  #+begin_src  elisp
 (setq user-full-name "David Rambo"
       user-mail-address "davrambo@gmail.com")
  #+end_src
 
+** Both
+ I run this with both Linux and Mac OS, which have ~system-type~ variables set to ~'gnu/linux~ and ~'darwin~ respectively.
 * Fonts
  Doom exposes five (optional) variables for controlling fonts in Doom. Here
  are the three important ones:
@@ -111,10 +116,18 @@ the default font's height is taken as the base.
 So others can use a floating point ~:height~ value relative to it.
 
 #+begin_src  elisp
-(setq doom-font (font-spec :family "SauceCodePro Nerd Font" :size 14.0)
-      doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 16.0 :weight 'regular)
-      doom-serif-font (font-spec :family "DejaVu Serif" :size 16.0)
-      doom-big-font (font-spec :size 28.0))
+(cond ((eq system-type 'gnu/linux)
+        (setq doom-font (font-spec :family "SauceCodePro Nerd Font" :size 14.0)
+            doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 16.0 :weight 'regular)
+            doom-serif-font (font-spec :family "DejaVu Serif" :size 16.0)
+            doom-big-font (font-spec :size 28.0))
+       )
+      ((eq system-type 'darwin)
+        (setq doom-font (font-spec :family "SauceCodePro Nerd Font Mono" :size 16.0)
+            doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 17.0 :weight 'light)
+            doom-serif-font (font-spec :family "PT Serif" :size 16.0)
+            doom-big-font (font-spec :size 28.0))
+       ))
 #+end_src
 
 (set-face-attribute 'default nil :height 100)
@@ -125,12 +138,18 @@ There are two ways to load a theme. Both assume the theme is installed and
 (setq doom-theme 'doom-one)
 
 #+begin_src elisp
-(setq doom-theme 'doom-gruvbox-light)
-(after! doom-themes
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t
-        doom-gruvbox-light-variant "soft"
-        doom-gruvbox-dark-variant "soft"))
+(cond ((eq system-type 'gnu/linux)
+        (setq doom-theme 'doom-gruvbox)
+            (after! doom-themes
+            (setq doom-themes-enable-bold t
+                    doom-themes-enable-italic t
+                    doom-gruvbox-light-variant "hard"
+                    doom-gruvbox-dark-variant "medium"))
+       ))
+
+(cond ((eq system-type 'darwin)
+        (setq doom-theme 'doom-one)
+       ))
 #+end_src
 
 * Basic Settings
@@ -535,7 +554,7 @@ I use  org-superstar to prettify bullets and TODOs.
   #+begin_src elisp
 (use-package! org-superstar-mode
   :custom
-    org-superstar-headline-bullets-list '("◉" "○" "⁖" "◌" "◿")
+    org-superstar-headline-bullets-list '("◉" "○" "◌" "⁖" "◿")
     org-superstar-first-inlinetask-bullet '("-")
     org-superstar-remove-leading-stars
   :hook (org-mode . org-bullets-mode))
@@ -549,10 +568,10 @@ I use  org-superstar to prettify bullets and TODOs.
                   ("[ ]" . 9744)
                   ("DONE" . 9745)
                   ("[X]" . 9745)
-                  (" READ" . ? )
-                  (" READING" . ?龎 )
+                  (" READ" .  )
+                  (" READING" . 龎 )
                   ("NEXT" . 9744)
-                  ("IN-PROGRESS" . ?))
+                  ("IN-PROGRESS" . ))
         org-superstar-item-bullet-alist
                 '((?* . ?•)
                   (?+ . ?○)
@@ -569,8 +588,8 @@ For when my checkboxes are in lists and not (TODO) headlines, which means org-su
   :custom
 ; ; (push '("[ ]" .  "☐") prettify-symbols-alist)
   prettify-symbols-alist '(("[ ]" . "☐")
-                          ("[X]" . "☑")
-                          ("[-]" . "❍"))
+                          ("[-]" . "❍")
+                          ("[X]" . "☑"))
   :hook (org-mode . prettify-symbols-mode)
 )
 #+end_src
@@ -600,44 +619,82 @@ For when my checkboxes are in lists and not (TODO) headlines, which means org-su
 #+end_src
 
 ** Org Agenda
-Set ~org-agenda-files~ and custom commands that show up with "SPC o A":
+*** org-agenda icons
+
+#+begin_src elisp
+(defun fw/agenda-icon-octicon (name)
+  "Returns an all-the-icons-octicon icon"
+  (list (all-the-icons-octicon name)))
+
+(defun fw/agenda-icon-faicon (name)
+  "Returns an all-the-icons-faicon icon"
+  (list (all-the-icons-faicon name)))
+
+;; The strings listed first ("Postdoc", etc.) refer to the categories under headings in my tasks.org file.
+;; https://old.reddit.com/r/emacs/comments/hnf3cw/my_orgmode_agenda_much_better_now_with_category/
+(setq org-agenda-category-icon-alist
+      `(("Postdoc" ,(fw/agenda-icon-octicon "pencil") nil nil :ascent center)
+        ("Coding" ,(fw/agenda-icon-faicon "code") nil nil :ascent center)
+        ("FRG" ,(fw/agenda-icon-octicon "book") nil nil :ascent center)
+        ("Home" ,(fw/agenda-icon-octicon "home") nil nil :ascent center)
+        ("Habits" ,(fw/agenda-icon-faicon "calendar-check-o") nil nil :ascent center)
+        ))
+#+end_src
+
+*** Set ~org-agenda-files~ and custom commands that show up with "SPC o A":
 
 #+begin_src elisp
 (setq org-agenda-custom-commands
   '(
     ("n" "In-Progress and Next Tasks"
      (
-     (todo "IN-PROGRESS|READING"
-       ((org-agenda-overriding-header "In-Progress Tasks")))
-     (todo "NEXT"
-       ((org-agenda-overriding-header "Next Tasks")))
-     (agenda "" ((org-deadline-warning-days 8)))
-     ))
+        (todo "IN-PROGRESS|READING"
+                ((org-agenda-overriding-header "\nIn-Progress Tasks\n-----------------")
+                (org-agenda-prefix-format "   %i %?-2 t%s")
+                (org-agenda-remove-tags t)))
+        (todo "NEXT"
+                ((org-agenda-overriding-header "\nNext Tasks\n----------")
+                (org-agenda-prefix-format "   %i %?-2 t%s")
+                (org-agenda-remove-tags t)))
+        (agenda "" (
+                (org-deadline-warning-days 8)
+                (org-agenda-remove-tags t)
+                (org-agenda-current-time-string "ᐊ┈┈┈┈┈┈┈ Now")
+                (org-agenda-overriding-header "\nSchedule\n--------")))))
 
     ("h" "Home-related tasks"
-       (tags-todo "+home"
-        ((org-agenda-overriding-header "Home Tasks")))
-        ((org-agenda-files '("~/notes/tasks.org")))
-        ; For when I expand agenda files and want this to be quick.
-       )
+       (tags-todo "home"
+        ((org-agenda-overriding-header "Home Tasks")
+        (org-agenda-remove-tags t)
+        ))
+     )
 
     ("w" "Work-related tasks"
      (
       (tags-todo "+postdoc-jobs"
-     ((org-agenda-overriding-header "Postdoc Tasks")))
+        ((org-agenda-overriding-header "\nPostdoc Tasks")))
       (tags-todo "book"
-     ((org-agenda-overriding-header "Book Tasks")))
+        ((org-agenda-overriding-header "\nBook Tasks")))
       (tags-todo "jobs"
-     ((org-agenda-overriding-header "Job Application Tasks")))
+        ((org-agenda-overriding-header "\nJob Application Tasks")))
      ))
 
-    ("b" "Book-related tasks" tags-todo "book")
+    ("b" "Book-related tasks"
+     ( tags-todo "book"
+        ((org-agenda-overriding-header "\nBook Tasks")
+        (org-agenda-remove-tags t)
+        )
+     ))
 
     ("r" "Reading Tasks"
      ((todo " READING"
-            ((org-agenda-overriding-header "Currently Reading")))
+        ((org-agenda-overriding-header "\nCurrently Reading")
+        (org-agenda-remove-tags t)
+        ))
       (todo " READ"
-            ((org-agenda-overriding-header "To Read")))
+        ((org-agenda-overriding-header "\nTo Read")
+        (org-agenda-remove-tags t)
+        ))
       ))
 ))
 #+end_src
@@ -910,6 +967,12 @@ Set "s" as evil-substitute:
 
 Note that selecting two characters to which to jump can still be accomplished with avy ("g s s").
 I prefer to use avy's timed-character function ("g s /").
+** Open fold(s) in evil-normal-state
+Suddenly ~z o~  and ~z O~ in normal mode stopped opening folds.
+
+#+begin_src elisp
+#+end_src
+
 ** Buffer Movement
  Set Ctrl+PGUP/PGDN (my browser tab nav keys) to move between buffers.
  Rebind previous-buffer from <C-x C-Left> to C-PGUP (C-prior) and next-buffer to C-PGDN (or C-next)
@@ -955,7 +1018,7 @@ I also need to set the variable for centering text with this minor mode to true.
 I've take a line from the package's github repo so that every file for which visual-line-mode is enabled (that's the hook), it will enable visual-fill-column-mode.
 
 #+begin_src elisp
-(setq fill-column 85)
+(setq fill-column 88)
 
 (defun center-visual-fill ()
   (setq visual-fill-column-center-text t)

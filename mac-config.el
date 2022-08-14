@@ -1,31 +1,17 @@
 (setq user-full-name "David Rambo"
       user-mail-address "davrambo@gmail.com")
 
-(cond ((eq system-type 'gnu/linux)
-        (setq doom-font (font-spec :family "SauceCodePro Nerd Font" :size 14.0)
-            doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 16.0 :weight 'regular)
-            doom-serif-font (font-spec :family "DejaVu Serif" :size 16.0)
-            doom-big-font (font-spec :size 28.0))
-       )
-      ((eq system-type 'darwin)
-        (setq doom-font (font-spec :family "SauceCodePro Nerd Font Mono" :size 16.0)
-            doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 17.0 :weight 'light)
-            doom-serif-font (font-spec :family "PT Serif" :size 16.0)
-            doom-big-font (font-spec :size 28.0))
-       ))
+(setq doom-font (font-spec :family "SauceCodePro Nerd Font Mono" :size 16.0)
+      doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 17.0 :weight 'light)
+      doom-serif-font (font-spec :family "PT Serif" :size 16.0)
+      doom-big-font (font-spec :size 28.0))
 
-(cond ((eq system-type 'gnu/linux)
-        (setq doom-theme 'doom-gruvbox)
-            (after! doom-themes
-            (setq doom-themes-enable-bold t
-                    doom-themes-enable-italic t
-                    doom-gruvbox-light-variant "hard"
-                    doom-gruvbox-dark-variant "medium"))
-       ))
-
-(cond ((eq system-type 'darwin)
-        (setq doom-theme 'doom-one)
-       ))
+(setq doom-theme 'doom-one)
+(after! doom-themes
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t
+        doom-gruvbox-light-variant "hard"
+        doom-gruvbox-dark-variant "medium"))
 
 (setq fring-mode 'default)
 
@@ -82,6 +68,7 @@
   :hook (vterm-mode . eterm-256color-mode))
 
 (setq +modeline-height 22)
+(setq doom-themes-padded-modeline t)
 
 ;; From hlissner's private config:
 (after! ivy
@@ -144,7 +131,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 
       (setq mixed-pitch-set-height t)
       (setq variable-pitch (font-spec :family "SauceCodePro Nerd Font"))
-      (set-face-attribute 'variable-pitch nil :height 160)
+      (set-face-attribute 'variable-pitch nil :height 180)
 
   (defun mixed-pitch-sans-mode (&optional arg)
     "Change the default face of the current buffer to a sans-serif variable pitch."
@@ -158,7 +145,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
     :group 'basic-faces)
 
   (setq mixed-pitch-set-height t)
-  (setq variable-pitch-serif-font (font-spec :family "Palatino Linotype" :size 18.0))
+  (setq variable-pitch-serif-font (font-spec :family "PT Serif" :size 18.0))
   (set-face-attribute 'variable-pitch-serif nil :font variable-pitch-serif-font)
 
   (defun mixed-pitch-serif-mode (&optional arg)
@@ -187,7 +174,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
   ;'(org-code ((t (:inherit shadow doom-font))))
  ; '(org-code ((t (:inherit doom-font))))
   '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
-  '(org-document-title ((t (:inherit default :weight bold :height 1.1 :underline nil))))
+  '(org-document-title ((t (:inherit default :weight regular :height 1.1 :underline nil))))
 ;  '(org-document-info ((t (:foreground "dark orange"))))
   '(line-number-current-line ((t (:inherit (hl-line default) :background "none" :strike-through nil :underline nil :slant normal :weight normal))))
   '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 1.0))))
@@ -209,19 +196,6 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
         org-fontify-todo-headline t)
   )
 
-;(after! org
-;  (setq display-line-numbers '(not org-mode)))
-;(setq display-line-numbers-type nil)
-
-; Disable line numbers for certain modes
-;(dolist (mode '(org-mode-hook
-;                term-mode-hook
-;                eshell-mode-hook))
-;  (add-hook mode (lambda () (display-line-numbers-mode 'relative))))
-
-;(add-hook 'org-mode-hook (lambda ()
-;            (setq hl-line-mode nil)))
-
 (after! org
  (setq org-todo-keywords
        (quote ((sequence "TODO(t)" "NEXT(n)" "IN-PROGRESS(i)" "|" "DONE(d)")
@@ -233,13 +207,30 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 
 (after! org
  (setq org-todo-keyword-faces
-  '(("TODO" . (:foreground "#FB4934" :weight regular))
-    ("NEXT" . (:foreground "#458588" :slant italic))
-    ("IN-PROGRESS" . (:foreground "#076678" :slant italic))
-    ("DONE" . (:foreground "#8EC07C" :weight light :strike-through t))
-    (" READ" . (:foreground "#b16286" :weight regular))
-    (" READING" . (:foreground "#8f3f71" :weight regular))
-    ("WAITING" . (:foreground "black" :weight light))
+  '(("TODO" .
+     (
+     ; :foreground "#FB4934"
+      :weight regular
+      )
+     )
+    ("NEXT" . (
+               ;:foreground "#458588"
+               :slant italic))
+    ("IN-PROGRESS" . (
+                      ;:foreground "#076678"
+                      :slant italic))
+    ("DONE" . (
+               ;:foreground "#8EC07C"
+               :weight light :strike-through t))
+    (" READ" . (
+                ;:foreground "#b16286"
+                :weight regular))
+    (" READING" . (
+                   ;:foreground "#8f3f71"
+                   :weight regular))
+    ("WAITING" . (
+                  ;:foreground "black"
+                  :weight light))
    )
  )
 )
@@ -258,10 +249,10 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
                   ("[ ]" . 9744)
                   ("DONE" . 9745)
                   ("[X]" . 9745)
-                  (" READ" .  )
-                  (" READING" . 龎 )
+                  (" READ" . ? )
+                  (" READING" . ?龎 )
                   ("NEXT" . 9744)
-                  ("IN-PROGRESS" . ))
+                  ("IN-PROGRESS" . ?))
         org-superstar-item-bullet-alist
                 '((?* . ?•)
                   (?+ . ?○)
@@ -273,8 +264,8 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
   :custom
 ; ; (push '("[ ]" .  "☐") prettify-symbols-alist)
   prettify-symbols-alist '(("[ ]" . "☐")
-                          ("[-]" . "❍")
-                          ("[X]" . "☑"))
+                          ("[X]" . "☑")
+                          ("[-]" . "❍"))
   :hook (org-mode . prettify-symbols-mode)
 )
 
@@ -377,12 +368,14 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
         org-agenda-skip-scheduled-if-done t
         org-agenda-skip-deadline-if-done t
         org-agenda-include-deadlines t
-        org-agenda-block-separator 9472
+        org-agenda-block-separator nil
         org-agenda-tags-column 100
         org-agenda-compact-blocks nil
         org-agenda-dim-blocked-tasks nil
         org-agenda-start-on-weekday nil
         org-super-agenda-groups nil
+        org-agenda-breadcrumbs-separator " ❱ "
+        org-agenda-hidden-separator "‌‌ "
         )
   :config
   (org-super-agenda-mode)
@@ -536,8 +529,6 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 
 (define-key evil-motion-state-map "s" 'evil-substitute)
 (define-key evil-motion-state-map "S" 'evil-change-whole-line)
-
-
 
 (global-set-key (kbd "C-<prior>") #'previous-buffer)
 (global-set-key (kbd "C-<next>") #'next-buffer)
