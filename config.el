@@ -9,7 +9,7 @@
        )
       ((eq system-type 'darwin)
         (setq doom-font (font-spec :family "SauceCodePro Nerd Font Mono" :size 16.0)
-            doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 17.0 :weight 'light)
+            doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 18.0 :weight 'light)
             doom-serif-font (font-spec :family "PT Serif" :size 16.0)
             doom-big-font (font-spec :size 28.0))
        ))
@@ -144,7 +144,13 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 
       (setq mixed-pitch-set-height t)
       (setq variable-pitch (font-spec :family "SauceCodePro Nerd Font"))
-      (set-face-attribute 'variable-pitch nil :height 160)
+      (cond ((eq system-type 'gnu/linux)
+            (set-face-attribute 'variable-pitch nil :height 160)
+             )
+            ((eq system-type 'darwin)
+            (set-face-attribute 'variable-pitch nil :height 180)
+             )
+        )
 
   (defun mixed-pitch-sans-mode (&optional arg)
     "Change the default face of the current buffer to a sans-serif variable pitch."
@@ -158,7 +164,12 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
     :group 'basic-faces)
 
   (setq mixed-pitch-set-height t)
-  (setq variable-pitch-serif-font (font-spec :family "Palatino Linotype" :size 18.0))
+  (cond ((eq system-type 'gnu/linux)
+        (setq variable-pitch-serif-font (font-spec :family "Palatino Linotype" :size 18.0))
+       )
+      ((eq system-type 'darwin)
+        (setq variable-pitch-serif-font (font-spec :family "Palatino" :size 18.0)))
+  )
   (set-face-attribute 'variable-pitch-serif nil :font variable-pitch-serif-font)
 
   (defun mixed-pitch-serif-mode (&optional arg)
@@ -565,7 +576,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
   ;; home row priorities: 8 6 4 5 - - 1 2 3 7
   (setq avy-keys '(?t ?e ?i ?s ?r ?o ?a ?n)))
 
-(setq fill-column 88)
+(setq fill-column 85)
 
 (defun center-visual-fill ()
   (setq visual-fill-column-center-text t)
