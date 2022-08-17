@@ -68,4 +68,3 @@
 (package! org-sidebar)
 (package! centered-cursor-mode)
 (package! good-scroll)
-(package! todoist)
