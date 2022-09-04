@@ -9,7 +9,7 @@
        )
       ((eq system-type 'darwin)
         (setq doom-font (font-spec :family "SauceCodePro Nerd Font Mono" :size 16.0)
-            doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 18.0 :weight 'light)
+            doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 18.0 :weight 'regular)
             doom-serif-font (font-spec :family "PT Serif" :size 16.0)
             doom-big-font (font-spec :size 28.0))
        ))
@@ -29,7 +29,7 @@
 
 (setq fring-mode 'default)
 
-(setq global-hl-line-mode 'nil)
+(setq global-hl-line-mode 't)
 
 (setq  evil-want-fine-undo t
        undo-limit 80000000)

@@ -126,7 +126,7 @@ So others can use a floating point ~:height~ value relative to it.
        )
       ((eq system-type 'darwin)
         (setq doom-font (font-spec :family "SauceCodePro Nerd Font Mono" :size 16.0)
-            doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 18.0 :weight 'light)
+            doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 18.0 :weight 'regular)
             doom-serif-font (font-spec :family "PT Serif" :size 16.0)
             doom-big-font (font-spec :size 28.0))
        ))
@@ -164,7 +164,7 @@ There are two ways to load a theme. Both assume the theme is installed and
 ** Line highlight
 
 #+begin_src elisp
-(setq global-hl-line-mode 'nil)
+(setq global-hl-line-mode 't)
 #+end_src
 
 ** Finer grained undo
@@ -424,8 +424,10 @@ This section establishes:
 
 Including my entire org notes directory in the agenda was too slow (at least the first time I loaded it up).
 So I went back to only "tasks.org" and I will add to it with "C-c [".
-I may add my journal subdirectory in the future:
-~org-agenda-files '("~/notes/tasks.org" (files-expand-wildcards "~/notes/journal/*.org"))~
+In the future, I may create a subdirectory ~tasks/*.org~ for ~org-agenda-files~.
+
+The following as an eval at the end of my tasks.org file worked, but it caused a warning message:
+(add-to-list 'org-agenda-files "~/notes/cs61a_syllabus.org" 'append)
 
 #+begin_src elisp
 (after! org
