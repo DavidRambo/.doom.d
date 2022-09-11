@@ -30,9 +30,9 @@
   - [[#set-org-directory][Set org directory]]
   - [[#after-org-settings][After org settings]]
   - [[#turn-off-company][Turn off company]]
-  - [[#styling-quote-blocks-and-done-headlines][Styling quote blocks and DONE headlines]]
   - [[#line-numbers][Line numbers]]
   - [[#disable-line-highlighting][Disable line highlighting]]
+  - [[#styling-quote-blocks-and-done-headlines][Styling quote blocks and DONE headlines]]
   - [[#todos][TODOs]]
   - [[#bullets-superstar][Bullets (superstar)]]
   - [[#prettify-symbols][Prettify symbols]]
@@ -63,7 +63,6 @@
   - [[#open-tasksorg-file][Open tasks.org file]]
   - [[#open-hours-log][Open hours log]]
   - [[#org-sidebar][Org-Sidebar]]
-  - [[#todoist-1][todoist]]
 
 * Preamble
 
@@ -440,6 +439,8 @@ The following as an eval at the end of my tasks.org file worked, but it caused a
        ;line-spacing 0.3
        org-bullets-face-name doom-font
        display-line-numbers-type nil
+       hl-line-mode nil
+       org-indent-indentation-per-level 1
        )
 
  (custom-set-faces
@@ -449,7 +450,7 @@ The following as an eval at the end of my tasks.org file worked, but it caused a
   '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
   '(org-document-title ((t (:inherit default :weight bold :height 1.1 :underline nil))))
 ;  '(org-document-info ((t (:foreground "dark orange"))))
-  '(line-number-current-line ((t (:inherit (hl-line default) :background "none" :strike-through nil :underline nil :slant normal :weight normal))))
+  '(line-number-current-line ((t (:inherit (hl-line default) :strike-through nil :underline nil :slant normal :weight normal))))
   '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 1.0))))
   '(org-property-value ((t (:inherit (fixed-pitch) :weight regular :height 1.0))))
   '(org-special-keyword ((t (:inherit (fixed-pitch) :weight regular :height 1.0))))
@@ -473,17 +474,6 @@ In the future for setting it here, the trick is to inherit ~org-outline~.
 #+begin_src elisp
 (after! org
     (setq company-global-modes '(not org-mode)))
-#+end_src
-
-** Styling quote blocks and DONE headlines
-Turn off quote block styling.
-Change entire headline when set to "DONE" todo status
-#+begin_src elisp
-(after! org
-  (setq org-fontify-quote-and-verse-blocks 'nil
-        org-fontify-done-headline t
-        org-fontify-todo-headline t)
-  )
 #+end_src
 
 ** Line numbers
@@ -529,6 +519,17 @@ I can do it manually with the function `global-hl-line-mode` but it won't take w
 
 Above does not work either.
 Neither will ~(setq global-hl-line-mode nil)~.
+
+** Styling quote blocks and DONE headlines
+Turn off quote block styling.
+Change entire headline when set to "DONE" todo status
+#+begin_src elisp
+(after! org
+  (setq org-fontify-quote-and-verse-blocks 'nil
+        org-fontify-done-headline t
+        org-fontify-todo-headline t)
+  )
+#+end_src
 
 ** TODOs
 *** Keywords and Priority
@@ -583,8 +584,10 @@ I use  org-superstar to prettify bullets and TODOs.
                   ("[ ]" . 9744)
                   ("DONE" . 9745)
                   ("[X]" . 9745)
-                  (" READ" .  )
-                  (" READING" . 龎 )
+                 ; (" READ" .  )
+                 ; (" READING" . 龎 )
+                  (" READ" . 9744)
+                  (" READING" . )
                   ("NEXT" . 9744)
                   ("IN-PROGRESS" . ))
         org-superstar-item-bullet-alist
@@ -1083,12 +1086,4 @@ This no longer works.
 ;(map! :leader
 ;      :desc "Toggle org-sidebar-tree"
 ;      "t s" #'org-sidebar-tree-toggle)
-#+end_src
-
-** todoist
-
-#+begin_src elisp
-(map! :leader
-      :desc "Toggle todoist buffer"
-      "t t" #'todoist)
 #+end_src
