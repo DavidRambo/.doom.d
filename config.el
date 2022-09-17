@@ -480,7 +480,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
   (org-tree-slide-skip-outline-level 4))
 
 (use-package org-roam
-  :ensure t
+  ;:ensure t
   :init
   (setq org-roam-v2-ack t)
   :custom
@@ -533,7 +533,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 (setq todoist-token "9267d354b1afa603871992b5974a692bb33c47ac")
 
 (use-package python
-  :ensure t
+  ;:ensure t
   :custom
     (python-shell-interpreter "python3")
     )

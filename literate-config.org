@@ -834,7 +834,7 @@ Presentation mode for org-mode.
 
 #+begin_src elisp
 (use-package org-roam
-  :ensure t
+  ;:ensure t
   :init
   (setq org-roam-v2-ack t)
   :custom
@@ -932,7 +932,7 @@ I don't know how to integrate descriptions.
 
 #+begin_src elisp
 (use-package python
-  :ensure t
+  ;:ensure t
   :custom
     (python-shell-interpreter "python3")
     )
