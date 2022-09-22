@@ -9,7 +9,7 @@
        )
       ((eq system-type 'darwin)
         (setq doom-font (font-spec :family "SauceCodePro Nerd Font Mono" :size 16.0)
-            doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 18.0 :weight 'light)
+            doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 18.0 :weight 'regular)
             doom-serif-font (font-spec :family "PT Serif" :size 16.0)
             doom-big-font (font-spec :size 28.0))
        ))
@@ -29,7 +29,7 @@
 
 (setq fring-mode 'default)
 
-(setq global-hl-line-mode 'nil)
+(setq global-hl-line-mode 't)
 
 (setq  evil-want-fine-undo t
        undo-limit 80000000)
@@ -191,6 +191,8 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
        ;line-spacing 0.3
        org-bullets-face-name doom-font
        display-line-numbers-type nil
+       hl-line-mode nil
+       org-indent-indentation-per-level 1
        )
 
  (custom-set-faces
@@ -200,7 +202,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
   '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
   '(org-document-title ((t (:inherit default :weight bold :height 1.1 :underline nil))))
 ;  '(org-document-info ((t (:foreground "dark orange"))))
-  '(line-number-current-line ((t (:inherit (hl-line default) :background "none" :strike-through nil :underline nil :slant normal :weight normal))))
+  '(line-number-current-line ((t (:inherit (hl-line default) :strike-through nil :underline nil :slant normal :weight normal))))
   '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 1.0))))
   '(org-property-value ((t (:inherit (fixed-pitch) :weight regular :height 1.0))))
   '(org-special-keyword ((t (:inherit (fixed-pitch) :weight regular :height 1.0))))
@@ -214,12 +216,6 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 (after! org
     (setq company-global-modes '(not org-mode)))
 
-(after! org
-  (setq org-fontify-quote-and-verse-blocks 'nil
-        org-fontify-done-headline t
-        org-fontify-todo-headline t)
-  )
-
 ;(after! org
 ;  (setq display-line-numbers '(not org-mode)))
 ;(setq display-line-numbers-type nil)
@@ -232,6 +228,12 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 
 ;(add-hook 'org-mode-hook (lambda ()
 ;            (setq hl-line-mode nil)))
+
+(after! org
+  (setq org-fontify-quote-and-verse-blocks 'nil
+        org-fontify-done-headline t
+        org-fontify-todo-headline t)
+  )
 
 (after! org
  (setq org-todo-keywords
@@ -269,8 +271,10 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
                   ("[ ]" . 9744)
                   ("DONE" . 9745)
                   ("[X]" . 9745)
-                  (" READ" .  )
-                  (" READING" . 龎 )
+                 ; (" READ" .  )
+                 ; (" READING" . 龎 )
+                  (" READ" . 9744)
+                  (" READING" . )
                   ("NEXT" . 9744)
                   ("IN-PROGRESS" . ))
         org-superstar-item-bullet-alist
@@ -476,7 +480,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
   (org-tree-slide-skip-outline-level 4))
 
 (use-package org-roam
-  :ensure t
+  ;:ensure t
   :init
   (setq org-roam-v2-ack t)
   :custom
@@ -529,7 +533,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 (setq todoist-token "9267d354b1afa603871992b5974a692bb33c47ac")
 
 (use-package python
-  :ensure t
+  ;:ensure t
   :custom
     (python-shell-interpreter "python3")
     )
@@ -604,7 +608,3 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 ;(map! :leader
 ;      :desc "Toggle org-sidebar-tree"
 ;      "t s" #'org-sidebar-tree-toggle)
-
-(map! :leader
-      :desc "Toggle todoist buffer"
-      "t t" #'todoist)
