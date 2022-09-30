@@ -50,6 +50,7 @@
 - [[#python-ide][Python IDE]]
   - [[#turn-on-python-mode][Turn on python-mode]]
   - [[#line-numbers-in-python][line numbers in Python]]
+  - [[#autopep8][Autopep8]]
 - [[#mappings][Mappings]]
   - [[#narrowwiden-subtree][Narrow/Widen subtree]]
   - [[#esc-as-quit-key-c-g][ESC as quit key (C-g)]]
@@ -943,6 +944,20 @@ I don't know how to integrate descriptions.
 ;(add-hook  'python-mode-hook
 ;           (lambda () (setq-local display-line-numbers-type t)))
 ;(add-hook 'python-mode-hook 'display-line-numbers-mode t)
+#+end_src
+
+** Autopep8
+To automatically apply when saving a python file, use the
+following code:
+#+begin_src elisp
+(require 'py-autopep8)
+(add-hook 'python-mode-hook 'py-autopep8-mode)
+#+end_src
+
+To customize the behavior of "autopep8" you can set the
+`py-autopep8-options':
+#+begin_src elisp
+(setq py-autopep8-options '("--max-line-length=90" "--aggressive"))
 #+end_src
 
 * Mappings

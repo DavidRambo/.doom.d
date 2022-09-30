@@ -542,6 +542,11 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 ;           (lambda () (setq-local display-line-numbers-type t)))
 ;(add-hook 'python-mode-hook 'display-line-numbers-mode t)
 
+(require 'py-autopep8)
+(add-hook 'python-mode-hook 'py-autopep8-mode)
+
+(setq py-autopep8-options '("--max-line-length=90" "--aggressive"))
+
 (map! :leader
       :desc "Toggle narrow subtree"
       "t n" #'org-toggle-narrow-to-subtree)
