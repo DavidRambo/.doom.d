@@ -547,6 +547,9 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 
 (setq py-autopep8-options '("--max-line-length=90" "--aggressive"))
 
+(use-package py-autopep8
+   )
+
 (map! :leader
       :desc "Toggle narrow subtree"
       "t n" #'org-toggle-narrow-to-subtree)

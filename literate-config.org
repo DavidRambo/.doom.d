@@ -960,6 +960,14 @@ To customize the behavior of "autopep8" you can set the
 (setq py-autopep8-options '("--max-line-length=90" "--aggressive"))
 #+end_src
 
+#+RESULTS:
+| --max-line-length=90 | --aggressive |
+
+#+begin_src elisp
+(use-package py-autopep8
+   )
+#+end_src
+
 * Mappings
 ** Narrow/Widen subtree
 
