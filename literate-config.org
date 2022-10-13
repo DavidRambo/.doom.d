@@ -119,7 +119,7 @@ So others can use a floating point ~:height~ value relative to it.
 
 #+begin_src  elisp
 (cond ((eq system-type 'gnu/linux)
-        (setq doom-font (font-spec :family "SauceCodePro Nerd Font" :size 14.0)
+        (setq doom-font (font-spec :family "SauceCodePro NF" :size 14.0)
             doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 16.0 :weight 'regular)
             doom-serif-font (font-spec :family "DejaVu Serif" :size 16.0)
             doom-big-font (font-spec :size 28.0))
@@ -140,18 +140,22 @@ There are two ways to load a theme. Both assume the theme is installed and
 (setq doom-theme 'doom-one)
 
 #+begin_src elisp
-(cond ((eq system-type 'gnu/linux)
-        (setq doom-theme 'doom-gruvbox)
-            (after! doom-themes
-            (setq doom-themes-enable-bold t
-                    doom-themes-enable-italic t
-                    doom-gruvbox-light-variant "hard"
-                    doom-gruvbox-dark-variant "medium"))
-       ))
+(setq doom-theme 'doom-one)
+#+end_src
 
-(cond ((eq system-type 'darwin)
-        (setq doom-theme 'doom-one)
-       ))
+#+begin_src elisp
+;(cond ((eq system-type 'gnu/linux)
+;        (setq doom-theme 'doom-gruvbox)
+;            (after! doom-themes
+;            (setq doom-themes-enable-bold t
+;                    doom-themes-enable-italic t
+;                    doom-gruvbox-light-variant "hard"
+;                    doom-gruvbox-dark-variant "medium"))
+;       ))
+;
+;(cond ((eq system-type 'darwin)
+;        (setq doom-theme 'doom-one)
+;       ))
 #+end_src
 
 * Basic Settings
@@ -538,7 +542,7 @@ Change entire headline when set to "DONE" todo status
 (after! org
  (setq org-todo-keywords
        (quote ((sequence "TODO(t)" "NEXT(n)" "IN-PROGRESS(i)" "|" "DONE(d)")
-               (sequence " READ(r)" " READING(g)" "|" "DONE(d)")
+               (sequence "READ(r)" "READING(g)" "|" "DONE(d)")
                (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING")))
   )
  (setq org-lowest-priority ?C) ;; This is the default.
@@ -557,8 +561,8 @@ Org Fontify Done Headline was already set to true, but it can be found under "Or
     ("NEXT" . (:foreground "#458588" :slant italic))
     ("IN-PROGRESS" . (:foreground "#076678" :slant italic))
     ("DONE" . (:foreground "#8EC07C" :weight light :strike-through t))
-    (" READ" . (:foreground "#b16286" :weight regular))
-    (" READING" . (:foreground "#8f3f71" :weight regular))
+    ("READ" . (:foreground "#b16286" :weight regular))
+    ("READING" . (:foreground "#8f3f71" :weight regular))
     ("WAITING" . (:foreground "black" :weight light))
    )
  )
@@ -585,10 +589,10 @@ I use  org-superstar to prettify bullets and TODOs.
                   ("[ ]" . 9744)
                   ("DONE" . 9745)
                   ("[X]" . 9745)
-                 ; (" READ" .  )
-                 ; (" READING" . 龎 )
-                  (" READ" . 9744)
-                  (" READING" . )
+                  ("READ" .  )
+                  ("READING" . 龎 )
+                  ;; (" READ" . 9744)
+                  ;; (" READING" . )
                   ("NEXT" . 9744)
                   ("IN-PROGRESS" . ))
         org-superstar-item-bullet-alist
@@ -706,11 +710,11 @@ For when my checkboxes are in lists and not (TODO) headlines, which means org-su
      ))
 
     ("r" "Reading Tasks"
-     ((todo " READING"
+     ((todo "READING"
         ((org-agenda-overriding-header "\nCurrently Reading")
         (org-agenda-remove-tags t)
         ))
-      (todo " READ"
+      (todo "READ"
         ((org-agenda-overriding-header "\nTo Read")
         (org-agenda-remove-tags t)
         ))
@@ -880,6 +884,7 @@ I don't know how to integrate descriptions.
 
 ** Writeroom
 *** Config
+
 (use-package writeroom-mode
   :config
   (setq writeroom-fullscreen-effect nil
@@ -888,6 +893,7 @@ I don't know how to integrate descriptions.
     )
 
 *** Make writeroom default for org-mode files
+
 (use-package writeroom-mode
   :ensure t
   :init (add-hook 'org-mode-hook 'writeroom-mode)
@@ -1062,7 +1068,7 @@ From tecosaur's config, this sets the priority to colemak's homerow:
 Currently trying to implement the same effect with just the ~visual-fill-column~ package, which is what Writeroom uses (same author).
 My trouble with Writeroom is how it removes all other windows in the frame.
 I often want to use Writeroom simply to set ~fill-column~ to ~80~ (but with variable-pitch it works out to about 100 actual characters) and to set ~visual-fill-column-center-text~ to ~t~ without closing other windows.
-So when I use Writeroom, I need to then undo the window change use ~winner-undo~ (C-w C-u).
+So when I use Writeroom, I need to then undo the window change using ~winner-undo~ (C-w C-u).
 I also need to set the variable for centering text with this minor mode to true.
 
 I've take a line from the package's github repo so that every file for which visual-line-mode is enabled (that's the hook), it will enable visual-fill-column-mode.

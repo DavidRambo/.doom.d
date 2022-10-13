@@ -2,7 +2,7 @@
       user-mail-address "davrambo@gmail.com")
 
 (cond ((eq system-type 'gnu/linux)
-        (setq doom-font (font-spec :family "SauceCodePro Nerd Font" :size 14.0)
+        (setq doom-font (font-spec :family "SauceCodePro NF" :size 14.0)
             doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 16.0 :weight 'regular)
             doom-serif-font (font-spec :family "DejaVu Serif" :size 16.0)
             doom-big-font (font-spec :size 28.0))
@@ -14,18 +14,20 @@
             doom-big-font (font-spec :size 28.0))
        ))
 
-(cond ((eq system-type 'gnu/linux)
-        (setq doom-theme 'doom-gruvbox)
-            (after! doom-themes
-            (setq doom-themes-enable-bold t
-                    doom-themes-enable-italic t
-                    doom-gruvbox-light-variant "hard"
-                    doom-gruvbox-dark-variant "medium"))
-       ))
+(setq doom-theme 'doom-one)
 
-(cond ((eq system-type 'darwin)
-        (setq doom-theme 'doom-one)
-       ))
+;(cond ((eq system-type 'gnu/linux)
+;        (setq doom-theme 'doom-gruvbox)
+;            (after! doom-themes
+;            (setq doom-themes-enable-bold t
+;                    doom-themes-enable-italic t
+;                    doom-gruvbox-light-variant "hard"
+;                    doom-gruvbox-dark-variant "medium"))
+;       ))
+;
+;(cond ((eq system-type 'darwin)
+;        (setq doom-theme 'doom-one)
+;       ))
 
 (setq fring-mode 'default)
 
@@ -238,7 +240,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 (after! org
  (setq org-todo-keywords
        (quote ((sequence "TODO(t)" "NEXT(n)" "IN-PROGRESS(i)" "|" "DONE(d)")
-               (sequence " READ(r)" " READING(g)" "|" "DONE(d)")
+               (sequence "READ(r)" "READING(g)" "|" "DONE(d)")
                (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING")))
   )
  (setq org-lowest-priority ?C) ;; This is the default.
@@ -250,8 +252,8 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
     ("NEXT" . (:foreground "#458588" :slant italic))
     ("IN-PROGRESS" . (:foreground "#076678" :slant italic))
     ("DONE" . (:foreground "#8EC07C" :weight light :strike-through t))
-    (" READ" . (:foreground "#b16286" :weight regular))
-    (" READING" . (:foreground "#8f3f71" :weight regular))
+    ("READ" . (:foreground "#b16286" :weight regular))
+    ("READING" . (:foreground "#8f3f71" :weight regular))
     ("WAITING" . (:foreground "black" :weight light))
    )
  )
@@ -271,10 +273,10 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
                   ("[ ]" . 9744)
                   ("DONE" . 9745)
                   ("[X]" . 9745)
-                 ; (" READ" .  )
-                 ; (" READING" . 龎 )
-                  (" READ" . 9744)
-                  (" READING" . )
+                  ("READ" .  )
+                  ("READING" . 龎 )
+                  ;; (" READ" . 9744)
+                  ;; (" READING" . )
                   ("NEXT" . 9744)
                   ("IN-PROGRESS" . ))
         org-superstar-item-bullet-alist
@@ -371,11 +373,11 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
      ))
 
     ("r" "Reading Tasks"
-     ((todo " READING"
+     ((todo "READING"
         ((org-agenda-overriding-header "\nCurrently Reading")
         (org-agenda-remove-tags t)
         ))
-      (todo " READ"
+      (todo "READ"
         ((org-agenda-overriding-header "\nTo Read")
         (org-agenda-remove-tags t)
         ))
