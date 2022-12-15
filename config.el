@@ -1,5 +1,5 @@
 (setq user-full-name "David Rambo"
-      user-mail-address "davrambo@gmail.com")
+      user-mail-address "davidrambo@mailfence.com")
 
 (cond ((eq system-type 'gnu/linux)
         (setq doom-font (font-spec :family "SauceCodePro NF" :size 14.0)
@@ -197,20 +197,20 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
        org-indent-indentation-per-level 1
        )
 
- (custom-set-faces
-  '(org-block ((t (:inherit doom-font) :size 14)))
-  ;'(org-code ((t (:inherit shadow doom-font))))
- ; '(org-code ((t (:inherit doom-font))))
-  '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
-  '(org-document-title ((t (:inherit default :weight bold :height 1.1 :underline nil))))
-;  '(org-document-info ((t (:foreground "dark orange"))))
-  '(line-number-current-line ((t (:inherit (hl-line default) :strike-through nil :underline nil :slant normal :weight normal))))
-  '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 1.0))))
-  '(org-property-value ((t (:inherit (fixed-pitch) :weight regular :height 1.0))))
-  '(org-special-keyword ((t (:inherit (fixed-pitch) :weight regular :height 1.0))))
-;  '(org-super-agenda-header ((t (:foreground "#076678"))))
-  '(org-agenda-structure ((t (:foreground "#076678"))))
- )
+(custom-set-faces
+ ; '(org-block ((t (:inherit doom-font) :size 14)))
+ ;; '(org-quote ((t (:inherit shadow :slant normal))))
+ ;; '(org-code ((t (:inherit shadow doom-font))))
+ '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+ '(org-document-title ((t (:inherit default :weight bold :height 1.1 :underline nil))))
+  '(org-document-info ((t (:foreground "dark orange"))))
+ '(line-number-current-line ((t (:inherit (hl-line default) :strike-through nil :underline nil :slant normal :weight normal))))
+ '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 1.0))))
+ '(org-property-value ((t (:inherit (fixed-pitch) :weight regular :height 1.0))))
+ '(org-special-keyword ((t (:inherit (fixed-pitch) :weight regular :height 1.0))))
+  '(org-super-agenda-header ((t (:foreground "#076678"))))
+ '(org-agenda-structure ((t (:foreground "#076678"))))
+)
 
  (require 'org-inlinetask) ; C-c C-x t
 ) ; end after! org
@@ -232,7 +232,8 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 ;            (setq hl-line-mode nil)))
 
 (after! org
-  (setq org-fontify-quote-and-verse-blocks 'nil
+  (setq
+        org-fontify-quote-and-verse-blocks 'nil
         org-fontify-done-headline t
         org-fontify-todo-headline t)
   )
@@ -538,7 +539,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
   ;:ensure t
   :custom
     (python-shell-interpreter "python3")
-    )
+)
 
 ;(add-hook  'python-mode-hook
 ;           (lambda () (setq-local display-line-numbers-type t)))
@@ -548,9 +549,6 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 (add-hook 'python-mode-hook 'py-autopep8-mode)
 
 (setq py-autopep8-options '("--max-line-length=90" "--aggressive"))
-
-(use-package py-autopep8
-   )
 
 (map! :leader
       :desc "Toggle narrow subtree"

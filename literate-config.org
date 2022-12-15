@@ -94,7 +94,7 @@
 ** User Config
  #+begin_src  elisp
 (setq user-full-name "David Rambo"
-      user-mail-address "davrambo@gmail.com")
+      user-mail-address "davidrambo@mailfence.com")
  #+end_src
 
 ** Both
@@ -449,9 +449,8 @@ The following as an eval at the end of my tasks.org file worked, but it caused a
        )
 
  (custom-set-faces
-  '(org-block ((t (:inherit doom-font) :size 14)))
-  ;'(org-code ((t (:inherit shadow doom-font))))
- ; '(org-code ((t (:inherit doom-font))))
+  ;; '(org-block ((t (:inherit doom-font) :size 14)))
+  ;; '(org-quote ((t (:inherit shadow :slant normal))))
   '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
   '(org-document-title ((t (:inherit default :weight bold :height 1.1 :underline nil))))
 ;  '(org-document-info ((t (:foreground "dark orange"))))
@@ -530,7 +529,8 @@ Turn off quote block styling.
 Change entire headline when set to "DONE" todo status
 #+begin_src elisp
 (after! org
-  (setq org-fontify-quote-and-verse-blocks 'nil
+  (setq
+        ;; org-fontify-quote-and-verse-blocks 'nil
         org-fontify-done-headline t
         org-fontify-todo-headline t)
   )
@@ -942,7 +942,7 @@ I don't know how to integrate descriptions.
   ;:ensure t
   :custom
     (python-shell-interpreter "python3")
-    )
+)
 #+end_src
 
 ** line numbers in Python
@@ -966,13 +966,8 @@ To customize the behavior of "autopep8" you can set the
 (setq py-autopep8-options '("--max-line-length=90" "--aggressive"))
 #+end_src
 
-#+RESULTS:
-| --max-line-length=90 | --aggressive |
-
-#+begin_src elisp
 (use-package py-autopep8
    )
-#+end_src
 
 * Mappings
 ** Narrow/Widen subtree

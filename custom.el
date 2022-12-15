@@ -16,8 +16,7 @@
  '(jdee-db-requested-breakpoint-face-colors (cons "#0d1011" "#b8bb26"))
  '(jdee-db-spec-breakpoint-face-colors (cons "#0d1011" "#928374"))
  '(objed-cursor-color "#fb4934")
- '(org-agenda-files
-   '("~/notes/cs61a_syllabus.org" "~/notes/tasks.org"))
+ '(org-agenda-files '("~/notes/cs61a_syllabus.org" "~/notes/tasks.org"))
  '(pdf-view-midnight-colors (cons "#ebdbb2" "#32302f"))
  '(rustic-ansi-faces
    ["#32302f" "#fb4934" "#b8bb26" "#fabd2f" "#83a598" "#cc241d" "#8ec07c" "#ebdbb2"])
@@ -48,6 +47,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(line-number-current-line ((t (:inherit (hl-line default) :strike-through nil :underline nil :slant normal :weight normal))))
  '(org-agenda-structure ((t (:foreground "#076678"))))
  '(org-block ((t (:inherit doom-font) :size 14)))
  '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
@@ -63,6 +63,7 @@
  '(org-level-8 ((t (:inherit outline-8 :extend t :weight normal))))
  '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch :weight regular)))))
  '(org-property-value ((t (:inherit (fixed-pitch) :weight regular :height 1.0))) t)
+ ; '(org-quote ((t (:inherit shadow :slant normal))))
  '(org-special-keyword ((t (:inherit (fixed-pitch) :weight regular :height 1.0))))
  '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 1.0))))
  '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
