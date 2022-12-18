@@ -6,7 +6,6 @@
 * Table of Contents :TOC:
 - [[#preamble][Preamble]]
   - [[#user-config][User Config]]
-  - [[#both][Both]]
 - [[#fonts][Fonts]]
 - [[#theme][Theme]]
 - [[#basic-settings][Basic Settings]]
@@ -15,7 +14,7 @@
   - [[#finer-grained-undo][Finer grained undo]]
   - [[#splitting-windows][Splitting Windows]]
   - [[#set-windows-to-split-horizontally-by-default][Set windows to split horizontally by default]]
-  - [[#toggle-window-slip-between-horizontal-and-vertical][Toggle window slip between horizontal and vertical]]
+  - [[#toggle-window-split-between-horizontal-and-vertical][Toggle window split between horizontal and vertical]]
   - [[#terminal][Terminal]]
   - [[#pdfs][PDFs]]
   - [[#modeline][Modeline]]
@@ -24,7 +23,6 @@
   - [[#git-gutter][Git Gutter]]
   - [[#center-cursor-scrolling][Center cursor scrolling]]
   - [[#projectile][Projectile]]
-  - [[#smooth-scrolling][Smooth Scrolling]]
 - [[#org-settings][Org Settings]]
   - [[#mixed-pitch-for-org][Mixed-Pitch for Org]]
   - [[#set-org-directory][Set org directory]]
@@ -139,7 +137,7 @@ There are two ways to load a theme. Both assume the theme is installed and
 (setq doom-theme 'doom-one)
 
 #+begin_src elisp
-(setq doom-theme 'doom-one)
+(setq doom-theme 'doom-vibrant)
 #+end_src
 
 #+begin_src elisp

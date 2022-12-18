@@ -14,7 +14,7 @@
             doom-big-font (font-spec :size 28.0))
        ))
 
-(setq doom-theme 'doom-one)
+(setq doom-theme 'doom-vibrant)
 
 ;(cond ((eq system-type 'gnu/linux)
 ;        (setq doom-theme 'doom-gruvbox)
