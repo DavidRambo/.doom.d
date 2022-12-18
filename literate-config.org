@@ -97,8 +97,6 @@
       user-mail-address "davidrambo@mailfence.com")
  #+end_src
 
-** Both
- I run this with both Linux and Mac OS, which have ~system-type~ variables set to ~'gnu/linux~ and ~'darwin~ respectively.
 * Fonts
  Doom exposes five (optional) variables for controlling fonts in Doom. Here
  are the three important ones:
@@ -117,6 +115,7 @@ As explained by https://protesilaos.com/codelog/2020-09-05-emacs-note-mixed-font
 the default font's height is taken as the base.
 So others can use a floating point ~:height~ value relative to it.
 
+I run this with both Linux and Mac OS, which have ~system-type~ variables set to ~'gnu/linux~ and ~'darwin~ respectively.
 #+begin_src  elisp
 (cond ((eq system-type 'gnu/linux)
         (setq doom-font (font-spec :family "SauceCodePro NF" :size 14.0)
@@ -198,9 +197,7 @@ From https://github.com/sunnyhasija/Academic-Doom-Emacs-Config
 (setq split-width-threshold 0)
 #+end_src
 
-** Toggle window slip between horizontal and vertical
-I haven't implemented this because I prefer to do entirely horizontal split (in vim that's vertically split): i.e. side-by-side windows.
-I have set that preference above.
+** Toggle window split between horizontal and vertical
 
 #+begin_src elisp
 (defun toggle-window-split ()
@@ -326,25 +323,6 @@ This messes with projectile (according to ~doom doctor~), so I tell projectile t
         (remove ".git" projectile-project-root-files-bottom-up)))
 #+end_src
 
-** Smooth Scrolling
-It would be great if I could integrate this with evil-mode's bindings.
-Perhaps I will need to wait for emacs 29's pixel-scroll-precision-mode (and also for doom emacs to support that version of emacs).
-#+begin_src elisp
-(use-package good-scroll
-  :init
-  (global-set-key [next] #'good-scroll-up-full-screen)
-  (global-set-key [prior] #'good-scroll-down-full-screen)
-  (setq good-scroll-mode t))
-#+end_src
-
-(use-package sublimity)
-
-(use-package sublimity-scroll
-  :init
-  (setq sublimity-scroll-weight 10
-        sublimity-scroll-drift-length 5))
-
-(use-package sublimity-map)
 * Org Settings
 ** Mixed-Pitch for Org
 

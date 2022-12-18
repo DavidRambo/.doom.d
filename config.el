@@ -115,12 +115,6 @@
   (setq projectile-project-root-files-bottom-up
         (remove ".git" projectile-project-root-files-bottom-up)))
 
-(use-package good-scroll
-  :init
-  (global-set-key [next] #'good-scroll-up-full-screen)
-  (global-set-key [prior] #'good-scroll-down-full-screen)
-  (setq good-scroll-mode t))
-
 ;(use-package! mixed-pitch
 ;  :hook (org-mode . mixed-pitch-mode)
 ;  :config
@@ -197,20 +191,19 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
        org-indent-indentation-per-level 1
        )
 
-(custom-set-faces
- ; '(org-block ((t (:inherit doom-font) :size 14)))
- ;; '(org-quote ((t (:inherit shadow :slant normal))))
- ;; '(org-code ((t (:inherit shadow doom-font))))
- '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
- '(org-document-title ((t (:inherit default :weight bold :height 1.1 :underline nil))))
-  '(org-document-info ((t (:foreground "dark orange"))))
- '(line-number-current-line ((t (:inherit (hl-line default) :strike-through nil :underline nil :slant normal :weight normal))))
- '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 1.0))))
- '(org-property-value ((t (:inherit (fixed-pitch) :weight regular :height 1.0))))
- '(org-special-keyword ((t (:inherit (fixed-pitch) :weight regular :height 1.0))))
-  '(org-super-agenda-header ((t (:foreground "#076678"))))
- '(org-agenda-structure ((t (:foreground "#076678"))))
-)
+ (custom-set-faces
+  ;; '(org-block ((t (:inherit doom-font) :size 14)))
+  ;; '(org-quote ((t (:inherit shadow :slant normal))))
+  '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+  '(org-document-title ((t (:inherit default :weight bold :height 1.1 :underline nil))))
+;  '(org-document-info ((t (:foreground "dark orange"))))
+  '(line-number-current-line ((t (:inherit (hl-line default) :strike-through nil :underline nil :slant normal :weight normal))))
+  '(org-tag ((t (:inherit (shadow fixed-pitch) :weight regular :height 1.0))))
+  '(org-property-value ((t (:inherit (fixed-pitch) :weight regular :height 1.0))))
+  '(org-special-keyword ((t (:inherit (fixed-pitch) :weight regular :height 1.0))))
+;  '(org-super-agenda-header ((t (:foreground "#076678"))))
+  '(org-agenda-structure ((t (:foreground "#076678"))))
+ )
 
  (require 'org-inlinetask) ; C-c C-x t
 ) ; end after! org
@@ -233,7 +226,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 
 (after! org
   (setq
-        org-fontify-quote-and-verse-blocks 'nil
+        ;; org-fontify-quote-and-verse-blocks 'nil
         org-fontify-done-headline t
         org-fontify-todo-headline t)
   )
