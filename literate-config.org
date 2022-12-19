@@ -28,7 +28,6 @@
   - [[#set-org-directory][Set org directory]]
   - [[#after-org-settings][After org settings]]
   - [[#turn-off-company][Turn off company]]
-  - [[#line-numbers][Line numbers]]
   - [[#disable-line-highlighting][Disable line highlighting]]
   - [[#styling-quote-blocks-and-done-headlines][Styling quote blocks and DONE headlines]]
   - [[#todos][TODOs]]
@@ -455,38 +454,6 @@ In the future for setting it here, the trick is to inherit ~org-outline~.
 (after! org
     (setq company-global-modes '(not org-mode)))
 #+end_src
-
-** Line numbers
-Update (2/26/2022): I set the line numbers type to nil in my "after org" settings block above.
-
-It seems that going back to doom-font configuration and implementing the mixed-pitch package has fixed the uneven left-hand column.
-
- I had disabled display-line-numbers in favor of linum-mode because
- linum-mode works better with non-monospace fonts:
-~;(global-linum-mode t)~
-~;(setq linum-format "%2d ")~
- (The problem is that wrapped lines would move into the line number column.)
- However, that is being deprecated and apparently slows emacs way down when reaching a thousand lines.
-
-#+begin_src elisp
-;(after! org
-;  (setq display-line-numbers '(not org-mode)))
-;(setq display-line-numbers-type nil)
-
-; Disable line numbers for certain modes
-;(dolist (mode '(org-mode-hook
-;                term-mode-hook
-;                eshell-mode-hook))
-;  (add-hook mode (lambda () (display-line-numbers-mode 'relative))))
-#+end_src
-
-I customized the color of the current line number as follows:
- 1. "M-x list-faces-display"
- 2. find "line-number-current-line" and press RET
- 3. set a new value and "Apply" or "Apply and Save"
-    a. I set "background" to "none" in order to get rid of the hl-line-mode highlighting.
-
-However, according to Eli Zaretskii, who wrote display-line-numbers, changing the face of the current line number disallows some of what makes this package more efficient than linum.
 
 ** Disable line highlighting
 
