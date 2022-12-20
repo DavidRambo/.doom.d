@@ -29,7 +29,13 @@
 ;        (setq doom-theme 'doom-one)
 ;       ))
 
-(setq fring-mode 'default)
+(setq fringe-mode 'default
+      display-line-numbers-type 'relative)
+
+(dolist (mode '(org-mode-hook
+                term-mode-hook
+                eshell-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 (setq global-hl-line-mode 't)
 
@@ -186,7 +192,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
        org-startup-folded 'content
        ;line-spacing 0.3
        org-bullets-face-name doom-font
-       display-line-numbers-type nil
+       ;; display-line-numbers-type nil
        hl-line-mode nil
        org-indent-indentation-per-level 1
        )
@@ -210,16 +216,6 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 
 (after! org
     (setq company-global-modes '(not org-mode)))
-
-;(after! org
-;  (setq display-line-numbers '(not org-mode)))
-;(setq display-line-numbers-type nil)
-
-; Disable line numbers for certain modes
-;(dolist (mode '(org-mode-hook
-;                term-mode-hook
-;                eshell-mode-hook))
-;  (add-hook mode (lambda () (display-line-numbers-mode 'relative))))
 
 ;(add-hook 'org-mode-hook (lambda ()
 ;            (setq hl-line-mode nil)))
