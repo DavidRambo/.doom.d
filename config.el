@@ -32,10 +32,16 @@
 (setq fringe-mode 'default
       display-line-numbers-type 'relative)
 
-(dolist (mode '(org-mode-hook
-                term-mode-hook
-                eshell-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+(defun dr/display-line-numbers-hook ()
+  (display-line-numbers-mode 1)
+  )
+(add-hook 'prog-mode-hook 'dr/display-line-numbers-hook)
+(add-hook 'text-mode-hook 'dr/display-line-numbers-hook)
+
+(defun dr/disable-line-numbers-hook ()
+  (display-line-numbers-mode 0)
+  )
+(add-hook 'org-mode-hook 'dr/disable-line-numbers-hook)
 
 (setq global-hl-line-mode 't)
 
@@ -521,8 +527,6 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
                         ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
                         ("\\paragraph{%s}" . "\\paragraph*{%s}")
                         ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
-
-(setq todoist-token "9267d354b1afa603871992b5974a692bb33c47ac")
 
 (use-package python
   ;:ensure t

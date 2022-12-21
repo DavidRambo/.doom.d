@@ -160,14 +160,20 @@ There are two ways to load a theme. Both assume the theme is installed and
 #+begin_src elisp
 (setq fringe-mode 'default
       display-line-numbers-type 'relative)
+
+(defun dr/display-line-numbers-hook ()
+  (display-line-numbers-mode 1)
+  )
+(add-hook 'prog-mode-hook 'dr/display-line-numbers-hook)
+(add-hook 'text-mode-hook 'dr/display-line-numbers-hook)
 #+end_src
 
 *** Disable line numbers for some modes
 #+begin_src elisp
-(dolist (mode '(org-mode-hook
-                term-mode-hook
-                eshell-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+(defun dr/disable-line-numbers-hook ()
+  (display-line-numbers-mode 0)
+  )
+(add-hook 'org-mode-hook 'dr/disable-line-numbers-hook)
 #+end_src
 
 ** Line highlight
