@@ -23,6 +23,7 @@
   - [[#git-gutter][Git Gutter]]
   - [[#center-cursor-scrolling][Center cursor scrolling]]
   - [[#projectile][Projectile]]
+  - [[#evil-snipe][evil-snipe]]
 - [[#org-settings][Org Settings]]
   - [[#mixed-pitch-for-org][Mixed-Pitch for Org]]
   - [[#set-org-directory][Set org directory]]
@@ -43,7 +44,6 @@
   - [[#pomodoro-timer][Pomodoro Timer]]
   - [[#org-export][Org Export]]
   - [[#latex-setup][LaTeX Setup]]
-  - [[#todoist][todoist]]
 - [[#python-ide][Python IDE]]
   - [[#turn-on-python-mode][Turn on python-mode]]
   - [[#line-numbers-in-python][line numbers in Python]]
@@ -285,7 +285,6 @@ Make doom-modeline smaller.
 
 #+begin_src elisp
 (use-package dired
-  :ensure nil
   :commands dired dired-jump
   :custom ((dired-listing-switches -agho --group-directories-first))
   :config
@@ -335,6 +334,23 @@ This messes with projectile (according to ~doom doctor~), so I tell projectile t
         (remove ".git" projectile-project-root-files-bottom-up)))
 #+end_src
 
+** evil-snipe
+Press "s" in normal mode to sneak.
+Then, use ~,~ and ~;~ to traverse options.
+Or press ~C-;~ to jump into avy overylay.
+#+begin_src elisp
+(use-package evil-snipe
+  :init
+  (setq evil-snipe-scope 'visible)
+  :config
+  (evil-snipe-mode +1))
+
+;; (evilem-define "s" 'evil-snipe-repeat
+;;                :bind ((evil-snipe-scope 'buffer)
+;;                       (evil-snipe-enable-highlight)
+;;                       (evil-snipe-enable-incremental-highlight)))
+#+end_src
+I would like to have it replicate leap.nvim (and other vim-sneak-alikes) by having it both jump to the first occurrence and show avy or easymotion prompts.
 * Org Settings
 ** Mixed-Pitch for Org
 
@@ -797,7 +813,6 @@ Presentation mode for org-mode.
 
 #+begin_src elisp
 (use-package org-roam
-  ;:ensure t
   :init
   (setq org-roam-v2-ack t)
   :custom
@@ -853,7 +868,6 @@ I don't know how to integrate descriptions.
 *** Make writeroom default for org-mode files
 
 (use-package writeroom-mode
-  :ensure t
   :init (add-hook 'org-mode-hook 'writeroom-mode)
   :after org)
 
@@ -892,7 +906,6 @@ I don't know how to integrate descriptions.
 
 #+begin_src elisp
 (use-package python
-  ;:ensure t
   :custom
     (python-shell-interpreter "python3")
 )
@@ -959,15 +972,15 @@ Scrolling up and down does not always remain in the correct column.
 Update: after removing a bunch of my custom face settings and installing the mixed-pitch package, it seems to work fine.
 
 ** "S" as substitute
+NOTE: I have come to prefer evil-snipe (by way of leap.nvim).
+
 Disable evil-snipe so that "s" can be used as evil-substitute
 I put the following in packages.el:
     `(package! evil-snipe :disable t)`
 Set "s" as evil-substitute:
 
-#+begin_src elisp
 (define-key evil-motion-state-map "s" 'evil-substitute)
 (define-key evil-motion-state-map "S" 'evil-change-whole-line)
-#+end_src
 
 Note that selecting two characters to which to jump can still be accomplished with avy ("g s s").
 I prefer to use avy's timed-character function ("g s /").

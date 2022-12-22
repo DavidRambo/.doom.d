@@ -49,9 +49,7 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
-;; Disable evil-snipe in order to use "s" as evil-substitute.
-(package! evil-snipe :disable t)
-
+(package! evil-snipe)
 (package! org-bullets :recipe
   (:host github
    :repo "sabof/org-bullets"

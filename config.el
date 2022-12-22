@@ -103,7 +103,6 @@
   (add-to-list 'ivy-re-builders-alist '(counsel-projectile-find-file . ivy--regex-plus)))
 
 (use-package dired
-  :ensure nil
   :commands dired dired-jump
   :custom ((dired-listing-switches -agho --group-directories-first))
   :config
@@ -126,6 +125,19 @@
 (after! projectile
   (setq projectile-project-root-files-bottom-up
         (remove ".git" projectile-project-root-files-bottom-up)))
+
+(use-package evil-snipe
+  :init
+  (setq evil-snipe-scope 'visible)
+  :config
+  (evil-snipe-mode +1))
+
+(add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
+
+;; (evilem-define "s" 'evil-snipe-repeat
+;;                :bind ((evil-snipe-scope 'buffer)
+;;                       (evil-snipe-enable-highlight)
+;;                       (evil-snipe-enable-incremental-highlight)))
 
 ;(use-package! mixed-pitch
 ;  :hook (org-mode . mixed-pitch-mode)
@@ -478,7 +490,6 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
   (org-tree-slide-skip-outline-level 4))
 
 (use-package org-roam
-  ;:ensure t
   :init
   (setq org-roam-v2-ack t)
   :custom
@@ -529,7 +540,6 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
                         ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 
 (use-package python
-  ;:ensure t
   :custom
     (python-shell-interpreter "python3")
 )
@@ -555,9 +565,6 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
 ; Make horizontal movement cross lines
 (setq-default evil-cross-lines t)
-
-(define-key evil-motion-state-map "s" 'evil-substitute)
-(define-key evil-motion-state-map "S" 'evil-change-whole-line)
 
 
 
