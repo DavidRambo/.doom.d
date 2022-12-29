@@ -126,18 +126,21 @@
   (setq projectile-project-root-files-bottom-up
         (remove ".git" projectile-project-root-files-bottom-up)))
 
-(use-package evil-snipe
-  :init
-  (setq evil-snipe-scope 'visible)
-  :config
-  (evil-snipe-mode +1))
-
-(add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
+;; (use-package evil-snipe
+;;   :init
+;;   (setq evil-snipe-scope 'visible)
+;;   :config
+;;   (evil-snipe-mode +1))
 
 ;; (evilem-define "s" 'evil-snipe-repeat
 ;;                :bind ((evil-snipe-scope 'buffer)
 ;;                       (evil-snipe-enable-highlight)
 ;;                       (evil-snipe-enable-incremental-highlight)))
+
+(use-package avy)
+
+(define-key evil-normal-state-map (kbd "s") 'avy-goto-char-2-below)
+(define-key evil-normal-state-map (kbd "S") 'avy-goto-char-2-above)
 
 ;(use-package! mixed-pitch
 ;  :hook (org-mode . mixed-pitch-mode)

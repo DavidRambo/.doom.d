@@ -24,6 +24,7 @@
   - [[#center-cursor-scrolling][Center cursor scrolling]]
   - [[#projectile][Projectile]]
   - [[#evil-snipe][evil-snipe]]
+  - [[#avy][avy]]
 - [[#org-settings][Org Settings]]
   - [[#mixed-pitch-for-org][Mixed-Pitch for Org]]
   - [[#set-org-directory][Set org directory]]
@@ -339,11 +340,11 @@ Press "s" in normal mode to sneak.
 Then, use ~,~ and ~;~ to traverse options.
 Or press ~C-;~ to jump into avy overylay.
 #+begin_src elisp
-(use-package evil-snipe
-  :init
-  (setq evil-snipe-scope 'visible)
-  :config
-  (evil-snipe-mode +1))
+;; (use-package evil-snipe
+;;   :init
+;;   (setq evil-snipe-scope 'visible)
+;;   :config
+;;   (evil-snipe-mode +1))
 
 ;; (evilem-define "s" 'evil-snipe-repeat
 ;;                :bind ((evil-snipe-scope 'buffer)
@@ -351,6 +352,14 @@ Or press ~C-;~ to jump into avy overylay.
 ;;                       (evil-snipe-enable-incremental-highlight)))
 #+end_src
 I would like to have it replicate leap.nvim (and other vim-sneak-alikes) by having it both jump to the first occurrence and show avy or easymotion prompts.
+** avy
+#+begin_src elisp
+(use-package avy)
+
+(define-key evil-normal-state-map (kbd "s") 'avy-goto-char-2-below)
+(define-key evil-normal-state-map (kbd "S") 'avy-goto-char-2-above)
+#+end_src
+
 * Org Settings
 ** Mixed-Pitch for Org
 
