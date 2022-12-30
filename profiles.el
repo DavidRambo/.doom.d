@@ -2,4 +2,7 @@
 ((default   (user-emacs-directory . "~/.config/emacs/")
             ("DOOMDIR" . "~/.config/doom/"))
             ; ("DOOMDIR" . "~/.doom.d/"))
- (efs       (user-emacs-directory . "~/.config/emacs-from-scratch/")))
+ (efs       (user-emacs-directory . "~/.config/emacs-from-scratch/"))
+ (vanilla   (user-emacs-directory . "~/.config/emacs/")
+            ("DOOMDIR" . "~/.config/vanilla-doom/")
+            ))
