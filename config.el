@@ -137,7 +137,7 @@
 ;;                       (evil-snipe-enable-highlight)
 ;;                       (evil-snipe-enable-incremental-highlight)))
 
-(use-package avy)
+;; (use-package avy)
 
 (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-2-below)
 (define-key evil-normal-state-map (kbd "S") 'avy-goto-char-2-above)
@@ -213,7 +213,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
        org-startup-folded 'content
        ;line-spacing 0.3
        org-bullets-face-name doom-font
-       ;; display-line-numbers-type nil
+       ;; display-line-numbers-type 0
        hl-line-mode nil
        org-indent-indentation-per-level 1
        )
@@ -250,7 +250,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 
 (after! org
  (setq org-todo-keywords
-       (quote ((sequence "TODO(t)" "NEXT(n)" "IN-PROGRESS(i)" "|" "DONE(d)")
+       (quote ((sequence "TODO(t)" "NEXT(n)" "ACTIVE(a)" "|" "DONE(d)")
                (sequence "READ(r)" "READING(g)" "|" "DONE(d)")
                (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING")))
   )
@@ -261,7 +261,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
  (setq org-todo-keyword-faces
   '(("TODO" . (:foreground "#FB4934" :weight regular))
     ("NEXT" . (:foreground "#458588" :slant italic))
-    ("IN-PROGRESS" . (:foreground "#076678" :slant italic))
+    ("ACTIVE" . (:foreground "#076678" :slant italic))
     ("DONE" . (:foreground "#8EC07C" :weight light :strike-through t))
     ("READ" . (:foreground "#b16286" :weight regular))
     ("READING" . (:foreground "#8f3f71" :weight regular))
@@ -289,7 +289,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
                   ;; (" READ" . 9744)
                   ;; (" READING" . )
                   ("NEXT" . 9744)
-                  ("IN-PROGRESS" . ))
+                  ("ACTIVE" . ))
         org-superstar-item-bullet-alist
                 '((?* . ?•)
                   (?+ . ?○)
@@ -343,10 +343,10 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 
 (setq org-agenda-custom-commands
   '(
-    ("n" "In-Progress and Next Tasks"
+    ("n" "Active and Next Tasks"
      (
-        (todo "IN-PROGRESS|READING"
-                ((org-agenda-overriding-header "\nIn-Progress Tasks\n-----------------")
+        (todo "ACTIVE|READING"
+                ((org-agenda-overriding-header "\nActive Tasks\n-----------------")
                 (org-agenda-prefix-format "   %i %?-2 t%s")
                 (org-agenda-remove-tags t)))
         (todo "NEXT"
@@ -424,7 +424,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 ;         :face (:foreground "#DC322F")
 ;         :order 1)
 ;        (:name "In Progress"
-;         :todo ("IN-PROGRESS(p)")
+;         :todo ("ACTIVE(a)")
 ;         :face (:foreground "#2AA198")
 ;         :order 2)
 ;        (:name "Next"
@@ -447,7 +447,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 ;        )
 ;;         (:name "Remaining Tasks"
 ;;                :and (:todo "TODO"
-;;                      :not (:todo "postdoc" :todo "IN-PROGRESS" :todo "NEXT" :todo "reading" :todo "writing")))
+;;                      :not (:todo "postdoc" :todo "ACTIVE" :todo "NEXT" :todo "reading" :todo "writing")))
 ;         (:todo "WAITING" :order 8)
 ;       )
 ;)

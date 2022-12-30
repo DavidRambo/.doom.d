@@ -41,7 +41,6 @@
   - [[#org-super-agenda][Org Super Agenda]]
   - [[#presentations][Presentations]]
   - [[#org-roam][Org Roam]]
-  - [[#writeroom][Writeroom]]
   - [[#pomodoro-timer][Pomodoro Timer]]
   - [[#org-export][Org Export]]
   - [[#latex-setup][LaTeX Setup]]
@@ -354,7 +353,7 @@ Or press ~C-;~ to jump into avy overylay.
 I would like to have it replicate leap.nvim (and other vim-sneak-alikes) by having it both jump to the first occurrence and show avy or easymotion prompts.
 ** avy
 #+begin_src elisp
-(use-package avy)
+;; (use-package avy)
 
 (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-2-below)
 (define-key evil-normal-state-map (kbd "S") 'avy-goto-char-2-above)
@@ -373,7 +372,6 @@ I would like to have it replicate leap.nvim (and other vim-sneak-alikes) by havi
 #+end_src
 
 Trying tecosaur's implementation with my sans serif variable pitch added (see the first chunks in the (after!) section):
-
 #+begin_src elisp
 (defvar mixed-pitch-modes '(org-mode LaTeX-mode markdown-mode)
   "Modes that `mixed-pitch-mode' should be enabled in, but only after UI initialisation.")
@@ -458,7 +456,7 @@ The following as an eval at the end of my tasks.org file worked, but it caused a
        org-startup-folded 'content
        ;line-spacing 0.3
        org-bullets-face-name doom-font
-       ;; display-line-numbers-type nil
+       ;; display-line-numbers-type 0
        hl-line-mode nil
        org-indent-indentation-per-level 1
        )
@@ -524,7 +522,7 @@ Change entire headline when set to "DONE" todo status
 #+begin_src elisp
 (after! org
  (setq org-todo-keywords
-       (quote ((sequence "TODO(t)" "NEXT(n)" "IN-PROGRESS(i)" "|" "DONE(d)")
+       (quote ((sequence "TODO(t)" "NEXT(n)" "ACTIVE(a)" "|" "DONE(d)")
                (sequence "READ(r)" "READING(g)" "|" "DONE(d)")
                (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING")))
   )
@@ -542,7 +540,7 @@ Org Fontify Done Headline was already set to true, but it can be found under "Or
  (setq org-todo-keyword-faces
   '(("TODO" . (:foreground "#FB4934" :weight regular))
     ("NEXT" . (:foreground "#458588" :slant italic))
-    ("IN-PROGRESS" . (:foreground "#076678" :slant italic))
+    ("ACTIVE" . (:foreground "#076678" :slant italic))
     ("DONE" . (:foreground "#8EC07C" :weight light :strike-through t))
     ("READ" . (:foreground "#b16286" :weight regular))
     ("READING" . (:foreground "#8f3f71" :weight regular))
@@ -577,7 +575,7 @@ I use  org-superstar to prettify bullets and TODOs.
                   ;; (" READ" . 9744)
                   ;; (" READING" . )
                   ("NEXT" . 9744)
-                  ("IN-PROGRESS" . ))
+                  ("ACTIVE" . ))
         org-superstar-item-bullet-alist
                 '((?* . ?•)
                   (?+ . ?○)
@@ -652,10 +650,10 @@ For when my checkboxes are in lists and not (TODO) headlines, which means org-su
 #+begin_src elisp
 (setq org-agenda-custom-commands
   '(
-    ("n" "In-Progress and Next Tasks"
+    ("n" "Active and Next Tasks"
      (
-        (todo "IN-PROGRESS|READING"
-                ((org-agenda-overriding-header "\nIn-Progress Tasks\n-----------------")
+        (todo "ACTIVE|READING"
+                ((org-agenda-overriding-header "\nActive Tasks\n-----------------")
                 (org-agenda-prefix-format "   %i %?-2 t%s")
                 (org-agenda-remove-tags t)))
         (todo "NEXT"
@@ -744,7 +742,7 @@ Basic configuration.
 ;         :face (:foreground "#DC322F")
 ;         :order 1)
 ;        (:name "In Progress"
-;         :todo ("IN-PROGRESS(p)")
+;         :todo ("ACTIVE(a)")
 ;         :face (:foreground "#2AA198")
 ;         :order 2)
 ;        (:name "Next"
@@ -767,7 +765,7 @@ Basic configuration.
 ;        )
 ;;         (:name "Remaining Tasks"
 ;;                :and (:todo "TODO"
-;;                      :not (:todo "postdoc" :todo "IN-PROGRESS" :todo "NEXT" :todo "reading" :todo "writing")))
+;;                      :not (:todo "postdoc" :todo "ACTIVE" :todo "NEXT" :todo "reading" :todo "writing")))
 ;         (:todo "WAITING" :order 8)
 ;       )
 ;)
@@ -863,22 +861,6 @@ If I were to perform the keybind mappings with use-package, I think it would loo
                 etc.)
 
 I don't know how to integrate descriptions.
-
-** Writeroom
-*** Config
-
-(use-package writeroom-mode
-  :config
-  (setq writeroom-fullscreen-effect nil
-        writeroom-mode-line t
-        writeroom-width 80)
-    )
-
-*** Make writeroom default for org-mode files
-
-(use-package writeroom-mode
-  :init (add-hook 'org-mode-hook 'writeroom-mode)
-  :after org)
 
 ** Pomodoro Timer
 
